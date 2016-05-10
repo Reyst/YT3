@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <array name="image_urls">
+        <item>
+            http://img4.st.klumba-ua.com/img/used/2014/11/08/6260/l/6260139_9.jpg
+        </item>
+        <item>
+            http://img4.st.klumba-ua.com/img/used/2014/11/08/6260/l/6260139_8.jpg
+        </item>
+        <item>
+            http://img3.st.klumba-ua.com/img/used/2015/02/17/6802/l/6802488_3.jpg
+        </item>
+        <item>
+            http://img2.st.klumba-ua.com/img/used/2015/09/07/8037/l/8037167_4.jpg
+        </item>
+    </array>
+
+</resources>

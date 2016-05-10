@@ -1,0 +1,54 @@
+<resources>
+    <string name="app_name" translatable="false">"Yalantis 3rd task "</string>
+
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
+
+    <string name="action_settings" translatable="false">Settings</string>
+
+    <string name="str_created">Created</string>
+    <string name="str_registered">Registered</string>
+    <string name="str_deadline">Deadline</string>
+    <string name="emptyString" translatable="false" />
+    <string name="str_image">Image</string>
+    <string name="str_responsible">Responsible</string>
+    <string name="str_in_work">In work</string>
+    <string name="str_done">Done</string>
+    <string name="str_wait">Wait</string>
+    <string name="str_section_value">Dolls</string>
+
+    <string name="drawer_header_text" translatable="false">e-contact</string>
+
+    <string name="first_tab" translatable="false">В РОБОТІ</string>
+    <string name="second_tab" translatable="false">ВИКОНАНО</string>
+    <string name="third_tab" translatable="false">ОЧІКУЄ</string>
+
+    <string name="all_appeals" translatable="false">Всі звернення</string>
+    <string name="appeals_on_map" translatable="false">Звернення на мапі</string>
+    <string name="login" translatable="false">Увійти в аккаунт</string>
+    <string name="action_filter" translatable="false">Filter</string>
+    <string name="category1" translatable="false">Комунальне господарство</string>
+    <string name="category2" translatable="false">Благоустрій та будівництво</string>
+    <string name="responsible1" translatable="false">Днiпропетровський МВК</string>
+    <string name="responsible2" translatable="false">Павлоградськiй МВК</string>
+
+    <string name="days" translatable="false"> днів</string>
+
+    <string name="bottom_drawer_text1" translatable="false">Зроблено з любов\'ю</string>
+    <string name="bottom_drawer_text2" translatable="false"><a href="#">IT Ruh Dnipro</a> та <a href="#">Yalantis</a></string>
+
+    <string name="sectionTag">Section</string>
+    <string name="statusTag">Status</string>
+    <string name="createdTag">Label for created</string>
+    <string name="valueCreatedTag">Created</string>
+    <string name="registeredTag">Label for registered</string>
+    <string name="valueRegisteredTag">Registered</string>
+    <string name="deadlineTag">Label for deadline</string>
+    <string name="valueDeadlineTag">Deadline</string>
+    <string name="descriptionTag">Description</string>
+    <string name="responsibleTag">Label for responsible</string>
+    <string name="valueResponsibleTag">Responsible</string>
+    <string name="key_for_entity" translatable="false">IssueEntity</string>
+    <string name="descr_task_part1" translatable="false">"Полное описание задачи № "</string>
+    <string name="descr_task_part2" translatable="false">".This is a full description of the task № "</string>
+</resources>

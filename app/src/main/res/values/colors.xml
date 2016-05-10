@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#6082b4</color>
+
+    <color name="colorPrimaryDark">#FF426288</color>
+    <color name="colorAccent">#FFff9c25</color>
+
+    <color name="colorTabAccent">@android:color/white</color>
+    <color name="colorTabInactive">#FFDDDDDD</color>
+
+    <color name="colorGradientStart">#6082b4</color>
+    <color name="colorGradientCenter">#6786b9</color>
+    <color name="colorGradientEnd">#45b3c3</color>
+
+    <color name="statusBgColor">#f57f17</color>
+    <color name="statusColor">@android:color/white</color>
+    <color name="leftTextColor">#FF888888</color>
+    <color name="black_87">#de000000</color>
+
+</resources>

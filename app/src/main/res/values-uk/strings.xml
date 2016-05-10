@@ -1,0 +1,22 @@
+<resources>
+    <string name="sectionTag">Роздiл</string>
+    <string name="statusTag">Статус</string>
+    <string name="str_created">Створено</string>
+    <string name="createdTag">Напис "Створено"</string>
+    <string name="str_registered">Зареєстровано</string>
+    <string name="valueCreatedTag">Створено</string>
+    <string name="registeredTag">Напис "Зареєстровано"</string>
+    <string name="valueRegisteredTag">Зареєстровано</string>
+    <string name="deadlineTag">Напис "Вирiшити до"</string>
+    <string name="str_deadline">Вирiшити до</string>
+    <string name="valueDeadlineTag">Вирiшити до</string>
+    <string name="descriptionTag">Опис</string>
+    <string name="str_image">Зображення</string>
+    <string name="str_responsible">Відповідальний</string>
+    <string name="valueResponsibleTag">Відповідальний</string>
+    <string name="responsibleTag">Напис "Відповідальний"</string>
+    <string name="str_in_work">В роботі</string>
+    <string name="str_section_value">Ляльки</string>
+    <string name="str_done">Виконано</string>
+    <string name="str_wait">Очікує</string>
+</resources>

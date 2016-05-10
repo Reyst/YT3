@@ -1,0 +1,82 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+    </style>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
+    </style>
+
+    <style name="DrawerHeaderTitle">
+        <item name="android:textSize">@dimen/nav_header_title_text_size</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:alpha">0.69</item>
+    </style>
+
+    <style name="ListItem" />
+
+    <style name="ListItem.Text" />
+
+    <style name="ListItem.ImageView" />
+
+    <style name="ListItem.Text.Bottom">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/black_87</item>
+        <item name="android:textSize">@dimen/list_item_bottom_text_size</item>
+        <item name="android:alpha">0.54</item>
+
+    </style>
+
+    <style name="ListItem.Text.Top">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">@dimen/list_item_top_text_size</item>
+        <item name="android:alpha">0.87</item>
+        <item name="android:lines">2</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="ListItem.Text.Middle">
+        <item name="android:textColor">@color/black_87</item>
+        <item name="android:textSize">@dimen/list_item_middle_text_size</item>
+        <item name="android:alpha">0.54</item>
+        <item name="android:lines">1</item>
+    </style>
+
+    <style name="ListItem.Text.Likes">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">@dimen/list_item_bottom_text_size</item>
+        <item name="android:alpha">0.23</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ListItem.ImageView.Likes">
+        <item name="android:alpha">0.19</item>
+    </style>
+
+    <style name="ListItem.ImageView.Category">
+        <item name="android:alpha">0.54</item>
+    </style>
+
+    <style name="DrawerMenuItemAppearance" parent="TextAppearance.AppCompat.Menu">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="DividerStyle">
+        <item name="android:alpha">0.11</item>
+        <item name="android:background">@android:color/black</item>
+    </style>
+
+</resources>

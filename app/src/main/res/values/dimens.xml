@@ -1,0 +1,56 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+
+    <dimen name="text_part_vertical_padding">16dp</dimen>
+    <dimen name="scrollview_padding">16dp</dimen>
+    <dimen name="main_text_size">16sp</dimen>
+    <dimen name="status_bg_corner_radius">20dp</dimen>
+    <dimen name="status_bg_vertical_padding">4dp</dimen>
+    <dimen name="status_bg_horizontal_padding">12dp</dimen>
+    <dimen name="image_margin">4dp</dimen>
+    <dimen name="drawer_bottom_text_padding">12dp</dimen>
+    <dimen name="drawer_bottom_text_size">12sp</dimen>
+
+
+
+    <!--guides-->
+    <dimen name="list_item_margin">8dp</dimen>
+    <dimen name="list_item_margin_2">16dp</dimen>
+
+    <dimen name="list_item_card_height">126dp</dimen>
+    <dimen name="list_item_left_divider_margin">80dp</dimen>
+    <dimen name="divider_thick">1dp</dimen>
+    <dimen name="list_item_corner_radius">8dp</dimen>
+    <dimen name="list_item_parent_top_margin">16dp</dimen>
+    <dimen name="list_item_text_left_margin">17dp</dimen>
+    <dimen name="list_item_middle_top_margin">6dp</dimen>
+    <dimen name="list_item_text_right_margin">78dp</dimen>
+    <dimen name="list_item_middle_text_size">14sp</dimen>
+    <dimen name="list_item_top_text_size">16sp</dimen>
+    <dimen name="list_item_middle_text_height">16dp</dimen>
+    <dimen name="list_item_top_text_height">40dp</dimen>
+    <dimen name="list_item_bottom_block_height">48dp</dimen>
+    <dimen name="list_item_bottom_text_size">14sp</dimen>
+    <dimen name="list_item_bottom_text_height">16sp</dimen>
+    <dimen name="list_item_parent_right_margin">16dp</dimen>
+    <dimen name="list_item_days_text_right_margin">24dp</dimen>
+    <dimen name="thumb_up_size">18dp</dimen>
+    <dimen name="list_item_thumb_up_left_margin">20dp</dimen>
+    <dimen name="list_item_likes_left_margin">8dp</dimen>
+    <dimen name="category_icon_size">31dp</dimen>
+    <dimen name="list_item_category_icon_left_margin">20dp</dimen>
+    <dimen name="list_item_category_icon_top_margin">20dp</dimen>
+    <dimen name="navigation_view_width">304dp</dimen>
+
+    <dimen name="nav_header_height">100dp</dimen>
+    <dimen name="nav_header_vertical_margin">48dp</dimen>
+    <dimen name="nav_header_title_height">28dp</dimen>
+    <dimen name="nav_header_title_text_size">24sp</dimen>
+
+    <dimen name="indicator_padding">10dp</dimen>
+
+    <dimen name="fab_size">56dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+
+</resources>

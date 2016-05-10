@@ -14,39 +14,46 @@ import android.widget.Toast;
 
 import java.text.DateFormat;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import gsihome.reyst.y3t.R;
 import gsihome.reyst.y3t.adapters.ImageGalleryAdapter;
 import gsihome.reyst.y3t.data.IssueEntity;
 
 public class DetailActivity extends AppCompatActivity implements View.OnClickListener, ImageGalleryAdapter.OnItemClickListener {
 
-    private TextView mTextViewValueCreated;
-    private TextView mTextViewValueRegistered;
-    private TextView mTextViewValueDeadline;
+    @BindView(R.id.tv_value_created)
+    TextView mTextViewValueCreated;
 
-    private TextView mTextViewValueCategory;
-    private TextView mTextViewValueResponsible;
-    private TextView mTextViewValueStatus;
-    private TextView mTextViewDescription;
+    @BindView(R.id.tv_value_registered)
+    TextView mTextViewValueRegistered;
+
+    @BindView(R.id.tv_value_deadline)
+    TextView mTextViewValueDeadline;
+
+    @BindView(R.id.tv_section)
+    TextView mTextViewValueCategory;
+
+    @BindView(R.id.tv_value_responsible)
+    TextView mTextViewValueResponsible;
+
+    @BindView(R.id.tv_status)
+    TextView mTextViewValueStatus;
+
+    @BindView(R.id.tv_description)
+    TextView mTextViewDescription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
+        ButterKnife.bind(this);
+
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-
-        mTextViewValueCreated = (TextView) findViewById(R.id.tv_value_created);
-        mTextViewValueRegistered = (TextView) findViewById(R.id.tv_value_registered);
-        mTextViewValueDeadline = (TextView) findViewById(R.id.tv_value_deadline);
-
-        mTextViewValueCategory = (TextView) findViewById(R.id.tv_section);
-        mTextViewValueStatus = (TextView) findViewById(R.id.tv_status);
-        mTextViewValueResponsible = (TextView) findViewById(R.id.tv_value_responsible);
-        mTextViewDescription = (TextView) findViewById(R.id.tv_description);
 
         Intent intent = getIntent();
         IssueEntity entity = (IssueEntity) intent.getSerializableExtra(getString(R.string.key_for_entity));
@@ -56,16 +63,6 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         } else {
             finish();
         }
-
-//        ViewGroup vg = (ViewGroup) findViewById(R.id.main_container);
-//        if (vg != null) {
-//            int chCount = vg.getChildCount();
-//            for (int i = 0; i < chCount; i++) {
-//                View childView = vg.getChildAt(i);
-//                childView.setOnClickListener(this);
-//            }
-//        }
-
     }
 
     private void setEntityData(IssueEntity entity, ActionBar actionBar) {

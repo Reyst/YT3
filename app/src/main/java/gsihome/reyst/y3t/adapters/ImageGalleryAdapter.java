@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import gsihome.reyst.y3t.R;
 
 public class ImageGalleryAdapter extends RecyclerView.Adapter<ImageGalleryAdapter.ImageViewHolder> {
@@ -79,11 +81,12 @@ public class ImageGalleryAdapter extends RecyclerView.Adapter<ImageGalleryAdapte
 
     public static class ImageViewHolder extends ViewHolder {
 
-        private ImageView imageView;
+        @BindView(R.id.iv_image)
+        ImageView imageView;
 
         public ImageViewHolder(View v) {
             super(v);
-            imageView = (ImageView) v.findViewById(R.id.iv_image);
+            ButterKnife.bind(this, v);
         }
     }
 }

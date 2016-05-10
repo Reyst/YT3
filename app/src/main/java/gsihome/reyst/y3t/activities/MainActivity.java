@@ -18,6 +18,8 @@ import android.view.MenuItem;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import gsihome.reyst.y3t.R;
 import gsihome.reyst.y3t.adapters.PagerAdapter;
 import gsihome.reyst.y3t.data.State;
@@ -28,14 +30,19 @@ public class MainActivity extends AppCompatActivity
 
     private List<Fragment> mFragments;
     private List<String> mFragmentNames;
-    private DrawerLayout mDrawer;
 
-    private FloatingActionButton mFab;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout mDrawer;
+
+    @BindView(R.id.fab)
+    FloatingActionButton mFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ButterKnife.bind(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {
@@ -51,12 +58,6 @@ public class MainActivity extends AppCompatActivity
 
         initFragments();
         initViewPager();
-        initFab();
-
-    }
-
-    private void initFab() {
-        mFab = (FloatingActionButton) findViewById(R.id.fab);
     }
 
     private void initFragments() {
@@ -90,7 +91,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void initDrawer(Toolbar toolbar) {
-        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        //mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 

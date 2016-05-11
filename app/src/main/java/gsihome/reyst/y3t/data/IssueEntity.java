@@ -168,6 +168,13 @@ public class IssueEntity implements Serializable {
 
     public int getDaysAmount() {
         Date now = new Date();
-        return (int) ((now.getTime() - mCreated.getTime()) / (1000 * 24 * 3600));
+
+        int result = 0;
+        if (mCreated != null) {
+            result = (int) ((now.getTime() - mCreated.getTime()) / (1000 * 24 * 3600));
+        }
+
+        return result;
     }
+
 }

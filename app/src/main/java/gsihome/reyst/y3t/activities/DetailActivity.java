@@ -1,6 +1,5 @@
 package gsihome.reyst.y3t.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -12,15 +11,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.DateFormat;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import gsihome.reyst.y3t.R;
 import gsihome.reyst.y3t.adapters.ImageGalleryAdapter;
-import gsihome.reyst.y3t.data.IssueEntity;
+import gsihome.reyst.y3t.mvp.presenter.DetailDataPresenter;
+import gsihome.reyst.y3t.mvp.presenter.DetailDataPresenterImpl;
+import gsihome.reyst.y3t.mvp.view.DetailDataView;
 
-public class DetailActivity extends AppCompatActivity implements View.OnClickListener, ImageGalleryAdapter.OnItemClickListener {
+public class DetailActivity extends AppCompatActivity implements
+        View.OnClickListener, ImageGalleryAdapter.OnItemClickListener, DetailDataView {
 
     @BindView(R.id.tv_value_created)
     TextView mTextViewValueCreated;
@@ -43,6 +43,13 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     @BindView(R.id.tv_description)
     TextView mTextViewDescription;
 
+    @BindView(R.id.rv_images)
+    RecyclerView mRecyclerView;
+
+    ActionBar mActionBar;
+
+    private DetailDataPresenter mDataPresenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,72 +57,32 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
 
         ButterKnife.bind(this);
 
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
+        mActionBar = getSupportActionBar();
+        if (mActionBar != null) {
+            mActionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        Intent intent = getIntent();
-        IssueEntity entity = (IssueEntity) intent.getSerializableExtra(getString(R.string.key_for_entity));
+        mDataPresenter = new DetailDataPresenterImpl(this);
+        mDataPresenter.onCreate(getIntent(), this);
 
-        if (entity != null) {
-            setEntityData(entity, actionBar);
-        } else {
-            finish();
-        }
+        initRecyclerView();
+
     }
 
-    private void setEntityData(IssueEntity entity, ActionBar actionBar) {
-        if (actionBar != null) {
-            actionBar.setTitle(entity.getNumber());
-        }
-
-        initRecyclerView(entity);
-        initDates(entity);
-
-        mTextViewValueCategory.setText(entity.getCategory());
-        mTextViewValueResponsible.setText(entity.getResponsible());
-        mTextViewDescription.setText(entity.getFullText());
-
-        switch (entity.getState()) {
-            case IN_WORK:
-                mTextViewValueStatus.setText(R.string.str_in_work);
-                break;
-            case DONE:
-                mTextViewValueStatus.setText(R.string.str_done);
-                break;
-            case WAIT:
-                mTextViewValueStatus.setText(R.string.str_wait);
-                break;
-            default:
-                mTextViewValueStatus.setText(R.string.emptyString);
-                break;
-        }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mDataPresenter.onDestroy();
     }
 
-    private void initDates(IssueEntity entity) {
-
-        DateFormat dateFormat = android.text.format.DateFormat.getMediumDateFormat(getApplicationContext());
-
-        mTextViewValueRegistered.setText(dateFormat.format(entity.getRegistered()));
-        mTextViewValueCreated.setText(dateFormat.format(entity.getCreated()));
-        mTextViewValueDeadline.setText(dateFormat.format(entity.getDeadline()));
-    }
-
-    private void initRecyclerView(IssueEntity entity) {
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.rv_images);
-
-        if (recyclerView != null) {
-            ViewGroup.LayoutParams lp = recyclerView.getLayoutParams();
+    private void initRecyclerView() {
+        if (mRecyclerView != null) {
+            ViewGroup.LayoutParams lp = mRecyclerView.getLayoutParams();
             lp.height = getResources().getDisplayMetrics().widthPixels / 2;
-            recyclerView.setLayoutParams(lp);
-
-            recyclerView.setHasFixedSize(true);
-
+            mRecyclerView.setLayoutParams(lp);
+            mRecyclerView.setHasFixedSize(true);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
-            recyclerView.setLayoutManager(layoutManager);
-            RecyclerView.Adapter adapter = new ImageGalleryAdapter(this, entity.getImages(), this);
-            recyclerView.setAdapter(adapter);
+            mRecyclerView.setLayoutManager(layoutManager);
         }
     }
 
@@ -133,5 +100,38 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void closeView() {
+        finish();
+    }
+
+    @Override
+    public void setTitle(String title) {
+        if (mActionBar != null) {
+            mActionBar.setTitle(title);
+        }
+    }
+
+    @Override
+    public void setDateValues(String valueCreated, String valueRegistered, String valueDeadline) {
+        mTextViewValueCreated.setText(valueCreated);
+        mTextViewValueRegistered.setText(valueRegistered);
+        mTextViewValueDeadline.setText(valueDeadline);
+    }
+
+    @Override
+    public void setStringValues(String strCategory, String strResponsible, String strDescription, String strState) {
+        mTextViewValueCategory.setText(strCategory);
+        mTextViewValueResponsible.setText(strResponsible);
+        mTextViewValueStatus.setText(strState);
+        mTextViewDescription.setText(strDescription);
+    }
+
+    @Override
+    public void setAdapter(RecyclerView.Adapter adapter) {
+        mRecyclerView.setAdapter(adapter);
+    }
+
 }
 

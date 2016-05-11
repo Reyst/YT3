@@ -12,7 +12,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import gsihome.reyst.y3t.R;
 import gsihome.reyst.y3t.data.State;
@@ -34,14 +36,33 @@ public class RestClientHolder {
 
     private static void initService(Context context) {
 
+        JsonDeserializer<List<String>> stringListDeserializer = new JsonDeserializer<List<String>>() {
+            @Override
+            public List<String> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+
+                List<String> result = new ArrayList<>();
+
+                if (json.isJsonArray()) {
+                    for (JsonElement jsonElement : json.getAsJsonArray()) {
+                        result.add(jsonElement.getAsString());
+                    }
+                }
+
+                return result;
+            }
+        };
+
         JsonDeserializer<Date> dateDeserializer = new JsonDeserializer<Date>() {
             @Override
             public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
                 try {
-                    return new Date(json.getAsLong());
-                } catch (Exception ex) {
-                    Log.d("ERROR Date", ex.getLocalizedMessage());
-                    return new Date(0);
+                    long milliseconds = json.getAsLong();
+                    if (milliseconds == 0) {
+                        throw new ClassCastException();
+                    }
+                    return new Date(milliseconds);
+                } catch (ClassCastException ex) {
+                    return null;
                 }
             }
         };
@@ -78,6 +99,7 @@ public class RestClientHolder {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(Date.class, dateDeserializer)
                 .registerTypeAdapter(State.class, stateDeserializer)
+                .registerTypeAdapter(List.class, stringListDeserializer)
                 .create();
 
         Retrofit retrofit = new Retrofit.Builder()

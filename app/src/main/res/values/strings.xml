@@ -53,4 +53,5 @@
     <string name="descr_task_part2" translatable="false">".This is a full description of the task № "</string>
 
     <string name="base_api_url">http://dev-contact.yalantis.com/rest/v1/</string>
+    <string name="empty_date_message">Empty date.</string>
 </resources>

@@ -51,4 +51,6 @@
     <string name="key_for_entity" translatable="false">IssueEntity</string>
     <string name="descr_task_part1" translatable="false">"Полное описание задачи № "</string>
     <string name="descr_task_part2" translatable="false">".This is a full description of the task № "</string>
+
+    <string name="base_api_url">http://dev-contact.yalantis.com/rest/v1/</string>
 </resources>

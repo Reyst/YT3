@@ -1,5 +1,6 @@
 package gsihome.reyst.y3t.activities;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -12,30 +13,38 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import gsihome.reyst.y3t.R;
 import gsihome.reyst.y3t.adapters.PagerAdapter;
+import gsihome.reyst.y3t.data.IssueEntity;
 import gsihome.reyst.y3t.data.State;
+import gsihome.reyst.y3t.data.rest.RestClientHolder;
+import gsihome.reyst.y3t.data.rest.TicketAPI;
 import gsihome.reyst.y3t.fragments.RecyclerViewFragment;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private List<Fragment> mFragments;
-    private List<String> mFragmentNames;
-
     @BindView(R.id.drawer_layout)
     DrawerLayout mDrawer;
-
     @BindView(R.id.fab)
     FloatingActionButton mFab;
+    private List<Fragment> mFragments;
+    private List<String> mFragmentNames;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +67,26 @@ public class MainActivity extends AppCompatActivity
 
         initFragments();
         initViewPager();
+    }
+
+    @OnClick(R.id.fab)
+    public void onFabClick(View v) {
+
+        TicketAPI client = RestClientHolder.getService(this);
+
+        Call<List<IssueEntity>> call = client.getInProgress();
+
+        call.enqueue(new Callback<List<IssueEntity>>() {
+            @Override
+            public void onResponse(Call<List<IssueEntity>> call, Response<List<IssueEntity>> response) {
+                Log.d("REST", response.body().toString());
+            }
+
+            @Override
+            public void onFailure(Call<List<IssueEntity>> call, Throwable t) {
+                Log.d("REST ERROR", t.getLocalizedMessage());
+            }
+        });
     }
 
     private void initFragments() {

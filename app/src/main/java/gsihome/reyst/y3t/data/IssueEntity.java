@@ -1,31 +1,46 @@
 package gsihome.reyst.y3t.data;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import gsihome.reyst.y3t.R;
+
 public class IssueEntity implements Serializable {
 
+    @SerializedName("id")
     private long _ID;
 
+    @SerializedName("ticket_id")
     private String mNumber;
+
+    @SerializedName("title")
     private String mCategory;
 
+    @SerializedName("state")
     private State mState;
 
+    @SerializedName("created_date")
     private Date mCreated;
+    @SerializedName("start_date")
     private Date mRegistered;
+    @SerializedName("deadline")
     private Date mDeadline;
 
     private String mResponsible;
 
+    @SerializedName("body")
     private String mFullText;
 
+    @SerializedName("files")
     private List<String> mImages;
 
-    private int mIconId;
+    private int mIconId = R.drawable.building_and_upgrade; // todo
 
+    @SerializedName("likes_counter")
     private int mLikeAmount;
 
 

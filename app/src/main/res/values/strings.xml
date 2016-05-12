@@ -52,6 +52,14 @@
     <string name="descr_task_part1" translatable="false">"Полное описание задачи № "</string>
     <string name="descr_task_part2" translatable="false">".This is a full description of the task № "</string>
 
-    <string name="base_api_url">http://dev-contact.yalantis.com/rest/v1/</string>
     <string name="empty_date_message">Empty date.</string>
+    <string name="date_format_pattern">MMM d, yyyy</string>
+
+    <string name="base_api_url">http://dev-contact.yalantis.com/rest/v1/</string>
+    <string name="base_picture_url">http://dev-contact.yalantis.com/files/ticket/</string>
+
+    <string name="in_progress_filter">0,9,5,7,8</string>
+    <string name="done_filter">10,6</string>
+    <string name="wait_filter">1,3,4</string>
+
 </resources>

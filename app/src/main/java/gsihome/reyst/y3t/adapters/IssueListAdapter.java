@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,8 +19,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import gsihome.reyst.y3t.R;
-import gsihome.reyst.y3t.data.DataUtil;
-import gsihome.reyst.y3t.data.IssueEntity;
+import gsihome.reyst.y3t.domain.IssueEntity;
+import gsihome.reyst.y3t.utils.ServiceApiHolder;
 
 public class IssueListAdapter extends RecyclerView.Adapter<IssueListAdapter.IssueViewHolder> {
 
@@ -26,17 +28,30 @@ public class IssueListAdapter extends RecyclerView.Adapter<IssueListAdapter.Issu
     private List<IssueEntity> mModel;
 
     private OnItemClickListener mOnItemClickListener;
-    private DateFormat mFormatter = DataUtil.getFormatter();
+    private DateFormat mFormatter;
 
-    public IssueListAdapter(Context mContext, List<IssueEntity> model, OnItemClickListener listener) {
-        this.mContext = mContext;
-        initModel(model);
+    public IssueListAdapter(Context context, OnItemClickListener listener) {
+        this.mContext = context;
         mOnItemClickListener = listener;
+        mFormatter = ServiceApiHolder.getFormatter(context);
+        mModel = new ArrayList<>();
     }
 
-    private void initModel(Collection<IssueEntity> data) {
-        mModel = new ArrayList<>(data.size());
-        mModel.addAll(data);
+    public IssueListAdapter(Context context, List<IssueEntity> model, OnItemClickListener listener) {
+        this(context, listener);
+        mModel.addAll(model);
+    }
+
+    public boolean addAll(Collection<? extends IssueEntity> collection) {
+        return mModel.addAll(collection);
+    }
+
+    public int size() {
+        return mModel.size();
+    }
+
+    public void clear() {
+        mModel.clear();
     }
 
     @Override
@@ -50,15 +65,25 @@ public class IssueListAdapter extends RecyclerView.Adapter<IssueListAdapter.Issu
 
         IssueEntity issueEntity = mModel.get(position);
 
-        holder.mTvCategoryTitle.setText(issueEntity.getCategory());
-        holder.mTvTaskDesc.setText(issueEntity.getFullText());
-        holder.mTvLikesAmount.setText(String.valueOf(issueEntity.getLikeAmount()));
-        holder.mIvCategoryIcon.setImageDrawable(ContextCompat.getDrawable(mContext, issueEntity.getIconId()));
-        holder.mTvDateCreated.setText(mFormatter.format(issueEntity.getCreated()));
+        holder.mTvCategoryTitle.setText(issueEntity.getCategory().getName());
+        holder.mTvTaskDesc.setText(issueEntity.getBody());
+        holder.mTvLikesAmount.setText(String.valueOf(issueEntity.getLikesCounter()));
+        holder.mTvDateCreated.setText(mFormatter.format(issueEntity.getCreatedDate()));
+
+        //holder.mIvCategoryIcon.setImageDrawable(ContextCompat.getDrawable(mContext, issueEntity.getIconId()));
+
+        Picasso.with(mContext)
+                .load(issueEntity.getTitle())
+                .error(ContextCompat.getDrawable(mContext, R.drawable.building_and_upgrade))
+                .into(holder.mIvCategoryIcon);
+
 
         String days = mContext.getResources().getString(R.string.days);
+        String emptyString = mContext.getResources().getString(R.string.emptyString);
 
-        holder.mTvDaysAmount.setText(String.valueOf(issueEntity.getDaysAmount()).concat(" ").concat(days));
+        int daysAmount = issueEntity.getDaysAmount();
+        String strDaysAmount = (daysAmount > -1) ? String.valueOf(daysAmount).concat(" ").concat(days) : emptyString;
+        holder.mTvDaysAmount.setText(strDaysAmount);
 
     }
 

@@ -6,11 +6,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import gsihome.reyst.y3t.R;
 import gsihome.reyst.y3t.adapters.ImageGalleryAdapter;
-import gsihome.reyst.y3t.data.IssueEntity;
+import gsihome.reyst.y3t.domain.File;
+import gsihome.reyst.y3t.domain.IssueEntity;
+import gsihome.reyst.y3t.domain.Performer;
 import gsihome.reyst.y3t.mvp.view.DetailDataView;
 
 public class DetailDataPresenterImpl implements DetailDataPresenter, ImageGalleryAdapter.OnItemClickListener {
@@ -20,11 +24,13 @@ public class DetailDataPresenterImpl implements DetailDataPresenter, ImageGaller
     private IssueEntity mEntity;
 
     private String mEmptyString;
+    private String mBasePictureUrl;
 
     public DetailDataPresenterImpl(Context context) {
         this.mContext = context;
 
         mEmptyString = context.getString(R.string.emptyString);
+        mBasePictureUrl = mContext.getString(R.string.base_picture_url);
 
     }
 
@@ -56,10 +62,10 @@ public class DetailDataPresenterImpl implements DetailDataPresenter, ImageGaller
 
         DateFormat dateFormat = android.text.format.DateFormat.getMediumDateFormat(mContext);
 
-        Date tempDt = mEntity.getRegistered();
+        Date tempDt = mEntity.getStartDate();
         String valueRegistered = (tempDt != null) ? dateFormat.format(tempDt) : mEmptyString;
 
-        tempDt = mEntity.getCreated();
+        tempDt = mEntity.getCreatedDate();
         String valueCreated = (tempDt != null) ? dateFormat.format(tempDt) : mEmptyString;
 
         tempDt = mEntity.getDeadline();
@@ -72,32 +78,39 @@ public class DetailDataPresenterImpl implements DetailDataPresenter, ImageGaller
 
     private void setEntityData() {
 
-        mDataView.setTitle(mEntity.getNumber());
+        mDataView.setTitle(mEntity.getTicketId());
         initDates();
 
-        String strCategory = mEntity.getCategory();
-        String strResponsible = mEntity.getResponsible();
-        String strDescription = mEntity.getFullText();
+        String strCategory = mEntity.getCategory().getName();
 
-        String strState;
-        switch (mEntity.getState()) {
-            case IN_WORK:
-                strState = mContext.getString(R.string.str_in_work);
-                break;
-            case DONE:
-                strState = mContext.getString(R.string.str_done);
-                break;
-            case WAIT:
-                strState = mContext.getString(R.string.str_wait);
-                break;
-            default:
-                strState = mEmptyString;
-                break;
-        }
+        List<Performer> performerList = mEntity.getPerformers();
+        String strResponsible = (!performerList.isEmpty()) ?  performerList.get(0).getOrganization() : mEmptyString;
+        String strDescription = mEntity.getBody();
+
+        String strState = mEntity.getState().getName();
+//        switch (mEntity.getState()) {
+//            case IN_WORK:
+//                strState = mContext.getString(R.string.str_in_work);
+//                break;
+//            case DONE:
+//                strState = mContext.getString(R.string.str_done);
+//                break;
+//            case WAIT:
+//                strState = mContext.getString(R.string.str_wait);
+//                break;
+//            default:
+//                strState = mEmptyString;
+//                break;
+//        }
 
         mDataView.setStringValues(strCategory, strResponsible, strDescription, strState);
 
-        RecyclerView.Adapter adapter = new ImageGalleryAdapter(mContext, mEntity.getImages(), this);
+        List<String> urlList = new ArrayList<>();
+        for (File f : mEntity.getFiles()) {
+            urlList.add(mBasePictureUrl + f.getFilename().trim());
+        }
+
+        RecyclerView.Adapter adapter = new ImageGalleryAdapter(mContext, urlList, this);
 
         mDataView.setAdapter(adapter);
     }

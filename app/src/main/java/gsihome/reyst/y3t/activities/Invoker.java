@@ -7,7 +7,7 @@ import android.widget.AdapterView;
 
 import gsihome.reyst.y3t.R;
 import gsihome.reyst.y3t.adapters.IssueListAdapter;
-import gsihome.reyst.y3t.data.IssueEntity;
+import gsihome.reyst.y3t.domain.IssueEntity;
 
 
 public class Invoker implements IssueListAdapter.OnItemClickListener, AdapterView.OnItemClickListener {
@@ -30,8 +30,8 @@ public class Invoker implements IssueListAdapter.OnItemClickListener, AdapterVie
     }
 
     private void invoke(IssueEntity entity) {
-        Intent intent = new Intent(mContext, DetailActivity.class);
-        intent.putExtra(mContext.getString(R.string.key_for_entity), entity);
-        mContext.startActivity(intent);
+//        Intent intent = new Intent(mContext, DetailActivity.class);
+//        intent.putExtra(mContext.getString(R.string.key_for_entity), entity);
+//        mContext.startActivity(intent);
     }
 }

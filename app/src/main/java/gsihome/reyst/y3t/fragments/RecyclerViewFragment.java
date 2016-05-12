@@ -8,26 +8,29 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.List;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import gsihome.reyst.y3t.R;
-import gsihome.reyst.y3t.activities.Invoker;
-import gsihome.reyst.y3t.adapters.IssueListAdapter;
-import gsihome.reyst.y3t.data.DataUtil;
-import gsihome.reyst.y3t.data.IssueEntity;
-import gsihome.reyst.y3t.data.State;
+import gsihome.reyst.y3t.mvp.presenter.IssueListPresenter;
+import gsihome.reyst.y3t.mvp.view.IssueListView;
+import gsihome.reyst.y3t.utils.IssueListPresenterHolder;
 
-public class RecyclerViewFragment extends Fragment {
+public class RecyclerViewFragment extends Fragment implements IssueListView {
 
-    private static final String STR_KEY_STATE = "state";
-    private IssueListAdapter mAdapter;
+    private static final String STR_KEY_FILTER = "filter";
 
-    public static Fragment getInstance(State state) {
+    @BindView(R.id.recycler_view)
+    RecyclerView mRecyclerView;
+
+    private IssueListPresenter mPresenter;
+    private String mFilter;
+
+    public static Fragment getInstance(String filter) {
 
         Fragment fragment = new RecyclerViewFragment();
 
         Bundle params = new Bundle();
-        params.putInt(STR_KEY_STATE, state.getValue());
+        params.putString(STR_KEY_FILTER, filter);
 
         fragment.setArguments(params);
 
@@ -38,14 +41,13 @@ public class RecyclerViewFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        State state = State.WAIT;
+        mFilter = null;
         Bundle params = getArguments();
         if (params != null) {
-            state = State.getByValue(params.getInt(STR_KEY_STATE, -1));
+            mFilter = params.getString(STR_KEY_FILTER, null);
         }
 
-        List<IssueEntity> issueList = DataUtil.getModel(getContext(), state);
-        mAdapter = new IssueListAdapter(getContext(), issueList, new Invoker(getContext()));
+        mPresenter = IssueListPresenterHolder.getPresenter(getContext(), this, mFilter);
     }
 
     @Override
@@ -53,15 +55,26 @@ public class RecyclerViewFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_recycler, container, false);
 
-        RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
+        ButterKnife.bind(this, v);
 
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(llm);
+        mRecyclerView.setLayoutManager(llm);
 
-        recyclerView.setAdapter(mAdapter);
-
+        mPresenter.init();
+//        mPresenter.getNextPage();
 
         return v;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+//        mPresenter.init();
+    }
+
+    @Override
+    public void setAdapter(RecyclerView.Adapter adapter) {
+        mRecyclerView.setAdapter(adapter);
     }
 }

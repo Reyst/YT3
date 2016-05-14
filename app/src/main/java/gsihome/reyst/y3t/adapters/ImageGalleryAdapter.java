@@ -60,6 +60,7 @@ public class ImageGalleryAdapter extends RecyclerView.Adapter<ImageGalleryAdapte
                 .load(path)
                 .resize(mSideLength, mSideLength)
                 .centerCrop()
+                .error(R.mipmap.ic_launcher)
                 .into(holder.imageView);
         holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override

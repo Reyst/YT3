@@ -15,12 +15,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import gsihome.reyst.y3t.R;
 import gsihome.reyst.y3t.adapters.ImageGalleryAdapter;
-import gsihome.reyst.y3t.mvp.presenter.DetailDataPresenter;
+import gsihome.reyst.y3t.mvp.DetailDataContract;
 import gsihome.reyst.y3t.mvp.presenter.DetailDataPresenterImpl;
-import gsihome.reyst.y3t.mvp.view.DetailDataView;
 
 public class DetailActivity extends AppCompatActivity implements
-        View.OnClickListener, ImageGalleryAdapter.OnItemClickListener, DetailDataView {
+        View.OnClickListener, ImageGalleryAdapter.OnItemClickListener, DetailDataContract.DetailDataView {
 
     @BindView(R.id.tv_value_created)
     TextView mTextViewValueCreated;
@@ -48,7 +47,7 @@ public class DetailActivity extends AppCompatActivity implements
 
     ActionBar mActionBar;
 
-    private DetailDataPresenter mDataPresenter;
+    private DetailDataContract.DetailDataPresenter mDataPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

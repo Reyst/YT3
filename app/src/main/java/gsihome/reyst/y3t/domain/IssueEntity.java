@@ -15,49 +15,34 @@ public class IssueEntity implements RealmModel {
     @PrimaryKey
     @SerializedName("id")
     private long id;
-
     @SerializedName("user")
     private User user;
-
     @SerializedName("address")
     private Address address;
-
     @SerializedName("geo_address")
     private GeoAddress geoAddress;
-
     @SerializedName("category")
     private Category category;
-
     @SerializedName("type")
     private Type type;
-
     @SerializedName("title")
     private String title;
-
     @SerializedName("body")
     private String body;
-
     @SerializedName("created_date")
     private Date createdDate;
-
     @SerializedName("start_date")
     private Date startDate;
-
     @SerializedName("state")
     private State state;
-
     @SerializedName("ticket_id")
     private String ticketId;
-
     @SerializedName("files")
     private RealmList<File> files;
-
     @SerializedName("performers")
     private RealmList<Performer> performers;
-
     @SerializedName("deadline")
     private Date deadline;
-
     @SerializedName("likes_counter")
     private int likesCounter;
 

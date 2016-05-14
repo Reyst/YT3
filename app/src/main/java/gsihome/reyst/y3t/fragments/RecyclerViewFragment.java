@@ -11,18 +11,17 @@ import android.view.ViewGroup;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import gsihome.reyst.y3t.R;
-import gsihome.reyst.y3t.mvp.presenter.IssueListPresenter;
-import gsihome.reyst.y3t.mvp.view.IssueListView;
+import gsihome.reyst.y3t.mvp.IssueListContract;
 import gsihome.reyst.y3t.utils.IssueListPresenterHolder;
 
-public class RecyclerViewFragment extends Fragment implements IssueListView {
+public class RecyclerViewFragment extends Fragment implements IssueListContract.IssueListView {
 
     private static final String STR_KEY_FILTER = "filter";
 
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
 
-    private IssueListPresenter mPresenter;
+    private IssueListContract.IssueListPresenter mPresenter;
     private String mFilter;
 
     public static Fragment getInstance(String filter) {
@@ -62,7 +61,6 @@ public class RecyclerViewFragment extends Fragment implements IssueListView {
         mRecyclerView.setLayoutManager(llm);
 
         mPresenter.init();
-//        mPresenter.getNextPage();
 
         return v;
     }
@@ -70,7 +68,6 @@ public class RecyclerViewFragment extends Fragment implements IssueListView {
     @Override
     public void onStart() {
         super.onStart();
-//        mPresenter.init();
     }
 
     @Override

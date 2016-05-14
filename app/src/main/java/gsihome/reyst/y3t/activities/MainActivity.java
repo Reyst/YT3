@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -21,12 +20,11 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import gsihome.reyst.y3t.R;
 import gsihome.reyst.y3t.adapters.PagerAdapter;
-import gsihome.reyst.y3t.mvp.presenter.MainActivityPresenter;
+import gsihome.reyst.y3t.mvp.MainActivityContract;
 import gsihome.reyst.y3t.mvp.presenter.MainActivityPresenterImpl;
-import gsihome.reyst.y3t.mvp.view.MainActivityView;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, MainActivityView {
+        implements NavigationView.OnNavigationItemSelectedListener, MainActivityContract.MainActivityView {
 
     @BindView(R.id.drawer_layout)
     DrawerLayout mDrawer;
@@ -40,7 +38,7 @@ public class MainActivity extends AppCompatActivity
     @BindView(R.id.tab_layout)
     TabLayout mTabLayout;
 
-    private MainActivityPresenter mPresenter;
+    private MainActivityContract.MainActivityPresenter mPresenter;
 
 
     @Override

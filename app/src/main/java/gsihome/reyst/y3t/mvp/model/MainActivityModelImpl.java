@@ -8,8 +8,9 @@ import java.util.List;
 
 import gsihome.reyst.y3t.R;
 import gsihome.reyst.y3t.fragments.RecyclerViewFragment;
+import gsihome.reyst.y3t.mvp.MainActivityContract;
 
-public class MainActivityModelImpl implements MainActivityModel {
+public class MainActivityModelImpl implements MainActivityContract.MainActivityModel {
 
     private Context mContext;
 

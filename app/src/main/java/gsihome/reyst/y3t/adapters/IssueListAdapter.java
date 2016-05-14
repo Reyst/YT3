@@ -30,11 +30,22 @@ public class IssueListAdapter extends RecyclerView.Adapter<IssueListAdapter.Issu
     private OnItemClickListener mOnItemClickListener;
     private DateFormat mFormatter;
 
+    private String mDays;
+    private String mEmptyString;
+
     public IssueListAdapter(Context context, OnItemClickListener listener) {
         this.mContext = context;
         mOnItemClickListener = listener;
         mFormatter = ServiceApiHolder.getFormatter(context);
         mModel = new ArrayList<>();
+
+        mDays = mContext.getResources().getString(R.string.days);
+        mEmptyString = context.getString(R.string.emptyString);
+
+    }
+
+    public void setModel(List<IssueEntity> model) {
+        mModel = model;
     }
 
     public IssueListAdapter(Context context, List<IssueEntity> model, OnItemClickListener listener) {
@@ -70,19 +81,15 @@ public class IssueListAdapter extends RecyclerView.Adapter<IssueListAdapter.Issu
         holder.mTvLikesAmount.setText(String.valueOf(issueEntity.getLikesCounter()));
         holder.mTvDateCreated.setText(mFormatter.format(issueEntity.getCreatedDate()));
 
-        //holder.mIvCategoryIcon.setImageDrawable(ContextCompat.getDrawable(mContext, issueEntity.getIconId()));
-
         Picasso.with(mContext)
                 .load(issueEntity.getTitle())
                 .error(ContextCompat.getDrawable(mContext, R.drawable.building_and_upgrade))
                 .into(holder.mIvCategoryIcon);
 
-
-        String days = mContext.getResources().getString(R.string.days);
-        String emptyString = mContext.getResources().getString(R.string.emptyString);
-
         int daysAmount = issueEntity.getDaysAmount();
-        String strDaysAmount = (daysAmount > -1) ? String.valueOf(daysAmount).concat(" ").concat(days) : emptyString;
+        String strDaysAmount = (daysAmount > -1) ? String.valueOf(daysAmount)
+                .concat(" ").concat(mDays) : mEmptyString;
+
         holder.mTvDaysAmount.setText(strDaysAmount);
 
     }

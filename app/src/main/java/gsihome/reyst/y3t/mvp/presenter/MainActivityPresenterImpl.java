@@ -1,20 +1,21 @@
 package gsihome.reyst.y3t.mvp.presenter;
 
 import android.content.Context;
+import android.content.Intent;
 
+import gsihome.reyst.y3t.activities.FacebookAccountActivity;
 import gsihome.reyst.y3t.adapters.PagerAdapter;
-import gsihome.reyst.y3t.mvp.model.MainActivityModel;
+import gsihome.reyst.y3t.mvp.MainActivityContract;
 import gsihome.reyst.y3t.mvp.model.MainActivityModelImpl;
-import gsihome.reyst.y3t.mvp.view.MainActivityView;
 
-public class MainActivityPresenterImpl implements MainActivityPresenter {
+public class MainActivityPresenterImpl implements MainActivityContract.MainActivityPresenter {
 
-    private MainActivityView mView;
+    private MainActivityContract.MainActivityView mView;
     private Context mContext;
 
-    private MainActivityModel mModel;
+    private MainActivityContract.MainActivityModel mModel;
 
-    public MainActivityPresenterImpl(Context context, MainActivityView view) {
+    public MainActivityPresenterImpl(Context context, MainActivityContract.MainActivityView view) {
         this.mContext = context;
         this.mView = view;
 
@@ -31,7 +32,7 @@ public class MainActivityPresenterImpl implements MainActivityPresenter {
 
     @Override
     public void onLoginClick() {
-        // TODO: Implement FB Login
+        mContext.startActivity(new Intent(mContext, FacebookAccountActivity.class));
     }
 
 }

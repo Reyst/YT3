@@ -5,21 +5,20 @@ import android.content.Context;
 import java.util.HashMap;
 import java.util.Map;
 
-import gsihome.reyst.y3t.mvp.presenter.IssueListPresenter;
+import gsihome.reyst.y3t.mvp.IssueListContract;
 import gsihome.reyst.y3t.mvp.presenter.IssueListPresenterImpl;
-import gsihome.reyst.y3t.mvp.view.IssueListView;
 
 public class IssueListPresenterHolder {
 
-    private static Map<IssueListView, IssueListPresenter> sPresenters;
+    private static Map<IssueListContract.IssueListView, IssueListContract.IssueListPresenter> sPresenters;
 
-    public static IssueListPresenter getPresenter(Context context, IssueListView view, String filter) {
+    public static IssueListContract.IssueListPresenter getPresenter(Context context, IssueListContract.IssueListView view, String filter) {
 
         if (sPresenters == null) {
             sPresenters = new HashMap<>();
         }
 
-        IssueListPresenter result = sPresenters.get(view);
+        IssueListContract.IssueListPresenter result = sPresenters.get(view);
 
         if (result == null) {
             result = new IssueListPresenterImpl(context, view, filter);

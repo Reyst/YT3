@@ -7,13 +7,14 @@ import android.util.Log;
 import java.util.List;
 
 import gsihome.reyst.y3t.domain.IssueEntity;
+import gsihome.reyst.y3t.mvp.IssueListContract;
 import gsihome.reyst.y3t.rest.TicketService;
 import gsihome.reyst.y3t.utils.ServiceApiHolder;
 import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Response;
 
-public class IssueListModelImpl implements IssueListModel {
+public class IssueListModelImpl implements IssueListContract.IssueListModel {
 
     private Context mContext;
     private String mFilter;

@@ -10,14 +10,14 @@ import gsihome.reyst.y3t.R;
 import gsihome.reyst.y3t.fragments.RecyclerViewFragment;
 import gsihome.reyst.y3t.mvp.MainActivityContract;
 
-public class MainActivityModelImpl implements MainActivityContract.MainActivityModel {
+public class MainActivityModel implements MainActivityContract.Model {
 
     private Context mContext;
 
     private List<Fragment> mFragments;
     private List<String> mFragmentNames;
 
-    public MainActivityModelImpl(Context context) {
+    public MainActivityModel(Context context) {
         mContext = context;
         initFragments();
     }

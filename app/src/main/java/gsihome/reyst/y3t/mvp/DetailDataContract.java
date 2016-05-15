@@ -2,13 +2,12 @@ package gsihome.reyst.y3t.mvp;
 
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
 import java.io.Serializable;
 import java.util.List;
 
 public interface DetailDataContract {
-    interface DetailDataModel extends Serializable {
+    interface Model extends Serializable {
 
         long getId();
         String getTitle();
@@ -24,9 +23,9 @@ public interface DetailDataContract {
 
     }
 
-    interface DetailDataPresenter {
+    interface Presenter {
 
-        void onCreate(Intent intent, DetailDataView dataView);
+        void onCreate(Intent intent, View dataView);
 
         void onDestroy();
 
@@ -34,7 +33,7 @@ public interface DetailDataContract {
 
     }
 
-    interface DetailDataView {
+    interface View {
 
 
         void closeView();
@@ -47,6 +46,6 @@ public interface DetailDataContract {
 
         void setAdapter(RecyclerView.Adapter adapter);
 
-        void onClick(View view);
+        void onClick(android.view.View view);
     }
 }

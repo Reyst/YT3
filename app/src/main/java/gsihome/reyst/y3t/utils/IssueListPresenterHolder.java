@@ -6,22 +6,22 @@ import java.util.HashMap;
 import java.util.Map;
 
 import gsihome.reyst.y3t.mvp.IssueListContract;
-import gsihome.reyst.y3t.mvp.presenter.IssueListPresenterImpl;
+import gsihome.reyst.y3t.mvp.presenter.IssueListPresenter;
 
 public class IssueListPresenterHolder {
 
-    private static Map<IssueListContract.IssueListView, IssueListContract.IssueListPresenter> sPresenters;
+    private static Map<IssueListContract.View, IssueListContract.Presenter> sPresenters;
 
-    public static IssueListContract.IssueListPresenter getPresenter(Context context, IssueListContract.IssueListView view, String filter) {
+    public static IssueListContract.Presenter getPresenter(Context context, IssueListContract.View view, String filter) {
 
         if (sPresenters == null) {
             sPresenters = new HashMap<>();
         }
 
-        IssueListContract.IssueListPresenter result = sPresenters.get(view);
+        IssueListContract.Presenter result = sPresenters.get(view);
 
         if (result == null) {
-            result = new IssueListPresenterImpl(context, view, filter);
+            result = new IssueListPresenter(context, view, filter);
             sPresenters.put(view, result);
         }
 

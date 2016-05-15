@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,10 +15,10 @@ import butterknife.ButterKnife;
 import gsihome.reyst.y3t.R;
 import gsihome.reyst.y3t.adapters.ImageGalleryAdapter;
 import gsihome.reyst.y3t.mvp.DetailDataContract;
-import gsihome.reyst.y3t.mvp.presenter.DetailDataPresenterImpl;
+import gsihome.reyst.y3t.mvp.presenter.DetailDataPresenter;
 
 public class DetailActivity extends AppCompatActivity implements
-        View.OnClickListener, ImageGalleryAdapter.OnItemClickListener, DetailDataContract.DetailDataView {
+        android.view.View.OnClickListener, ImageGalleryAdapter.OnItemClickListener, DetailDataContract.View {
 
     @BindView(R.id.tv_value_created)
     TextView mTextViewValueCreated;
@@ -47,7 +46,7 @@ public class DetailActivity extends AppCompatActivity implements
 
     ActionBar mActionBar;
 
-    private DetailDataContract.DetailDataPresenter mDataPresenter;
+    private DetailDataContract.Presenter mDataPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +60,7 @@ public class DetailActivity extends AppCompatActivity implements
             mActionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        mDataPresenter = new DetailDataPresenterImpl(this);
+        mDataPresenter = new DetailDataPresenter(this);
         mDataPresenter.onCreate(getIntent(), this);
 
         initRecyclerView();
@@ -86,7 +85,7 @@ public class DetailActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(android.view.View v) {
         Toast.makeText(this, v.getClass().getSimpleName(), Toast.LENGTH_SHORT).show();
     }
 

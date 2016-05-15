@@ -8,7 +8,7 @@ import java.util.List;
 import gsihome.reyst.y3t.adapters.PagerAdapter;
 
 public interface MainActivityContract {
-    interface MainActivityModel {
+    interface Model {
 
         List<Fragment> getFragments();
 
@@ -16,14 +16,14 @@ public interface MainActivityContract {
 
     }
 
-    interface MainActivityPresenter {
+    interface Presenter {
 
         void onCreate();
 
         void onLoginClick();
     }
 
-    interface MainActivityView {
+    interface View {
 
         FragmentManager getSupportFragmentManager();
 

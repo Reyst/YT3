@@ -13,7 +13,7 @@ import gsihome.reyst.y3t.domain.IssueEntity;
 import gsihome.reyst.y3t.domain.Performer;
 import gsihome.reyst.y3t.mvp.DetailDataContract;
 
-public class DetailDataModelImpl implements DetailDataContract.DetailDataModel {
+public class DetailDataMode implements DetailDataContract.Model {
 
     private long mId;
     private String mCategory;
@@ -30,7 +30,7 @@ public class DetailDataModelImpl implements DetailDataContract.DetailDataModel {
 
     private String mEmptyString;
 
-    public DetailDataModelImpl(Context context, IssueEntity entity) {
+    public DetailDataMode(Context context, IssueEntity entity) {
 
         mEmptyString = context.getString(R.string.emptyString);
         String basePictureUrl = context.getString(R.string.base_picture_url);

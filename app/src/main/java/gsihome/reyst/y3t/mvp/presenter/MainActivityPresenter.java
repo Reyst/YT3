@@ -6,20 +6,20 @@ import android.content.Intent;
 import gsihome.reyst.y3t.activities.FacebookAccountActivity;
 import gsihome.reyst.y3t.adapters.PagerAdapter;
 import gsihome.reyst.y3t.mvp.MainActivityContract;
-import gsihome.reyst.y3t.mvp.model.MainActivityModelImpl;
+import gsihome.reyst.y3t.mvp.model.MainActivityModel;
 
-public class MainActivityPresenterImpl implements MainActivityContract.MainActivityPresenter {
+public class MainActivityPresenter implements MainActivityContract.Presenter {
 
-    private MainActivityContract.MainActivityView mView;
+    private MainActivityContract.View mView;
     private Context mContext;
 
-    private MainActivityContract.MainActivityModel mModel;
+    private MainActivityContract.Model mModel;
 
-    public MainActivityPresenterImpl(Context context, MainActivityContract.MainActivityView view) {
+    public MainActivityPresenter(Context context, MainActivityContract.View view) {
         this.mContext = context;
         this.mView = view;
 
-        mModel = new MainActivityModelImpl(context);
+        mModel = new MainActivityModel(context);
     }
 
     @Override

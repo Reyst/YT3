@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import butterknife.BindView;
@@ -14,14 +13,14 @@ import gsihome.reyst.y3t.R;
 import gsihome.reyst.y3t.mvp.IssueListContract;
 import gsihome.reyst.y3t.utils.IssueListPresenterHolder;
 
-public class RecyclerViewFragment extends Fragment implements IssueListContract.IssueListView {
+public class RecyclerViewFragment extends Fragment implements IssueListContract.View {
 
     private static final String STR_KEY_FILTER = "filter";
 
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
 
-    private IssueListContract.IssueListPresenter mPresenter;
+    private IssueListContract.Presenter mPresenter;
     private String mFilter;
 
     public static Fragment getInstance(String filter) {
@@ -50,9 +49,9 @@ public class RecyclerViewFragment extends Fragment implements IssueListContract.
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public android.view.View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.fragment_recycler, container, false);
+        android.view.View v = inflater.inflate(R.layout.fragment_recycler, container, false);
 
         ButterKnife.bind(this, v);
 

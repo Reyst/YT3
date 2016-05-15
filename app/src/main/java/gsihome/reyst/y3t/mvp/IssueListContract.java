@@ -7,7 +7,7 @@ import java.util.List;
 import gsihome.reyst.y3t.domain.IssueEntity;
 
 public interface IssueListContract {
-    interface IssueListModel {
+    interface Model {
 
         void getData(Callback callback);
 
@@ -17,7 +17,7 @@ public interface IssueListContract {
 
     }
 
-    interface IssueListPresenter {
+    interface Presenter {
 
         void init();
 
@@ -25,7 +25,7 @@ public interface IssueListContract {
 
     }
 
-    interface IssueListView {
+    interface View {
 
         void setAdapter(RecyclerView.Adapter adapter);
     }

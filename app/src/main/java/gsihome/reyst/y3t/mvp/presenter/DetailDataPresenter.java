@@ -3,7 +3,6 @@ package gsihome.reyst.y3t.mvp.presenter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
 import java.io.Serializable;
 import java.util.List;
@@ -12,26 +11,26 @@ import gsihome.reyst.y3t.R;
 import gsihome.reyst.y3t.adapters.ImageGalleryAdapter;
 import gsihome.reyst.y3t.mvp.DetailDataContract;
 
-public class DetailDataPresenterImpl implements DetailDataContract.DetailDataPresenter, ImageGalleryAdapter.OnItemClickListener {
+public class DetailDataPresenter implements DetailDataContract.Presenter, ImageGalleryAdapter.OnItemClickListener {
 
     private Context mContext;
-    private DetailDataContract.DetailDataView mDataView;
+    private DetailDataContract.View mDataView;
 
-    private DetailDataContract.DetailDataModel mModel;
+    private DetailDataContract.Model mModel;
 
-    public DetailDataPresenterImpl(Context context) {
+    public DetailDataPresenter(Context context) {
         this.mContext = context;
     }
 
     @Override
-    public void onCreate(Intent intent, DetailDataContract.DetailDataView dataView) {
+    public void onCreate(Intent intent, DetailDataContract.View dataView) {
 
         mDataView = dataView;
 
         Serializable data = intent.getSerializableExtra(mContext.getString(R.string.key_for_entity));
 
-        if (data != null && data instanceof DetailDataContract.DetailDataModel) {
-            mModel = (DetailDataContract.DetailDataModel) data;
+        if (data != null && data instanceof DetailDataContract.Model) {
+            mModel = (DetailDataContract.Model) data;
             setEntityData();
         } else {
             mDataView.closeView();
@@ -66,7 +65,7 @@ public class DetailDataPresenterImpl implements DetailDataContract.DetailDataPre
     }
 
     @Override
-    public void onClick(View view) {
+    public void onClick(android.view.View view) {
         mDataView.onClick(view);
     }
 }

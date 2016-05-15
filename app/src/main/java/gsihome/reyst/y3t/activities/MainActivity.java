@@ -13,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,10 +20,10 @@ import butterknife.OnClick;
 import gsihome.reyst.y3t.R;
 import gsihome.reyst.y3t.adapters.PagerAdapter;
 import gsihome.reyst.y3t.mvp.MainActivityContract;
-import gsihome.reyst.y3t.mvp.presenter.MainActivityPresenterImpl;
+import gsihome.reyst.y3t.mvp.presenter.MainActivityPresenter;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, MainActivityContract.MainActivityView {
+        implements NavigationView.OnNavigationItemSelectedListener, MainActivityContract.View {
 
     @BindView(R.id.drawer_layout)
     DrawerLayout mDrawer;
@@ -38,7 +37,7 @@ public class MainActivity extends AppCompatActivity
     @BindView(R.id.tab_layout)
     TabLayout mTabLayout;
 
-    private MainActivityContract.MainActivityPresenter mPresenter;
+    private MainActivityContract.Presenter mPresenter;
 
 
     @Override
@@ -46,7 +45,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mPresenter = new MainActivityPresenterImpl(this, this);
+        mPresenter = new MainActivityPresenter(this, this);
 
         ButterKnife.bind(this);
 
@@ -66,7 +65,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @OnClick(R.id.fab)
-    public void onFabClick(View v) {
+    public void onFabClick(android.view.View v) {
 
     }
 

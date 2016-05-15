@@ -14,7 +14,7 @@ import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Response;
 
-public class IssueListModelImpl implements IssueListContract.IssueListModel {
+public class IssueListModel implements IssueListContract.Model {
 
     private Context mContext;
     private String mFilter;
@@ -22,7 +22,7 @@ public class IssueListModelImpl implements IssueListContract.IssueListModel {
     private TicketService ticketService;
     private Realm realmService;
 
-    public IssueListModelImpl(Context context, String filter) {
+    public IssueListModel(Context context, String filter) {
 
         mContext = context;
         mFilter = filter;
@@ -58,7 +58,6 @@ public class IssueListModelImpl implements IssueListContract.IssueListModel {
 
             @Override
             public void onFailure(Call<List<IssueEntity>> call, Throwable t) {
-
                 Log.d("ERROR", t.getLocalizedMessage());
             }
         });

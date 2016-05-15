@@ -11,25 +11,24 @@ import gsihome.reyst.y3t.adapters.IssueListAdapter;
 import gsihome.reyst.y3t.domain.IssueEntity;
 import gsihome.reyst.y3t.mvp.DetailDataContract;
 import gsihome.reyst.y3t.mvp.IssueListContract;
-import gsihome.reyst.y3t.mvp.model.DetailDataModelImpl;
-import gsihome.reyst.y3t.mvp.model.IssueListModelImpl;
-import io.realm.RealmList;
+import gsihome.reyst.y3t.mvp.model.DetailDataMode;
+import gsihome.reyst.y3t.mvp.model.IssueListModel;
 
-public class IssueListPresenterImpl implements IssueListContract.IssueListPresenter, IssueListAdapter.OnItemClickListener {
+public class IssueListPresenter implements IssueListContract.Presenter, IssueListAdapter.OnItemClickListener {
 
-    IssueListContract.IssueListModel mModel;
+    IssueListContract.Model mModel;
 
-    IssueListContract.IssueListView mView;
+    IssueListContract.View mView;
     Context mContext;
 
     IssueListAdapter mIssueAdapter;
 
 
-    public IssueListPresenterImpl(Context context, IssueListContract.IssueListView view, String filter) {
+    public IssueListPresenter(Context context, IssueListContract.View view, String filter) {
         mView = view;
         mContext = context;
         mIssueAdapter = new IssueListAdapter(context, this);
-        mModel = new IssueListModelImpl(context, filter);
+        mModel = new IssueListModel(context, filter);
     }
 
 
@@ -43,7 +42,7 @@ public class IssueListPresenterImpl implements IssueListContract.IssueListPresen
 
     @Override
     public void getNextPage() {
-        mModel.getData(new IssueListContract.IssueListModel.Callback() {
+        mModel.getData(new IssueListContract.Model.Callback() {
             @Override
             public void getResult(List<IssueEntity> data) {
 
@@ -59,7 +58,7 @@ public class IssueListPresenterImpl implements IssueListContract.IssueListPresen
     @Override
     public void onItemClick(IssueEntity entity) {
 
-        DetailDataContract.DetailDataModel model = new DetailDataModelImpl(mContext, entity);
+        DetailDataContract.Model model = new DetailDataMode(mContext, entity);
 
         Intent intent = new Intent(mContext, DetailActivity.class);
         intent.putExtra(mContext.getString(R.string.key_for_entity), model);

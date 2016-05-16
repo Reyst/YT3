@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -22,7 +23,10 @@ import gsihome.reyst.y3t.R;
 import gsihome.reyst.y3t.domain.IssueEntity;
 import gsihome.reyst.y3t.utils.ServiceApiHolder;
 
-public class IssueListAdapter extends RecyclerView.Adapter<IssueListAdapter.IssueViewHolder> {
+public class IssueListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+    private static final int VIEW_ITEM = 1;
+    private static final int VIEW_PROG = 0;
 
     private Context mContext;
     private List<IssueEntity> mModel;
@@ -34,23 +38,19 @@ public class IssueListAdapter extends RecyclerView.Adapter<IssueListAdapter.Issu
     private String mEmptyString;
 
     public IssueListAdapter(Context context, OnItemClickListener listener) {
-        this.mContext = context;
+
+        mContext = context;
+
+        mDays = context.getString(R.string.days);
+        mEmptyString = context.getString(R.string.emptyString);
+
         mOnItemClickListener = listener;
         mFormatter = ServiceApiHolder.getFormatter(context);
         mModel = new ArrayList<>();
-
-        mDays = mContext.getResources().getString(R.string.days);
-        mEmptyString = context.getString(R.string.emptyString);
-
     }
 
     public void setModel(List<IssueEntity> model) {
         mModel = model;
-    }
-
-    public IssueListAdapter(Context context, List<IssueEntity> model, OnItemClickListener listener) {
-        this(context, listener);
-        mModel.addAll(model);
     }
 
     public boolean addAll(Collection<? extends IssueEntity> collection) {
@@ -65,32 +65,70 @@ public class IssueListAdapter extends RecyclerView.Adapter<IssueListAdapter.Issu
         mModel.clear();
     }
 
-    @Override
-    public IssueViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(mContext).inflate(R.layout.list_item_card, parent, false);
-        return new IssueViewHolder(v);
+    public boolean add(IssueEntity object) {
+        return mModel.add(object);
+    }
+
+    public IssueEntity remove(int location) {
+        return mModel.remove(location);
+    }
+
+    public boolean contains(IssueEntity entity) {
+        return mModel.contains(entity);
     }
 
     @Override
-    public void onBindViewHolder(IssueViewHolder holder, int position) {
+    public int getItemViewType(int position) {
+        return mModel.get(position) != null ? VIEW_ITEM : VIEW_PROG;
+    }
 
-        IssueEntity issueEntity = mModel.get(position);
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        holder.mTvCategoryTitle.setText(issueEntity.getCategory().getName());
-        holder.mTvTaskDesc.setText(issueEntity.getBody());
-        holder.mTvLikesAmount.setText(String.valueOf(issueEntity.getLikesCounter()));
-        holder.mTvDateCreated.setText(mFormatter.format(issueEntity.getCreatedDate()));
+        View v;
+        RecyclerView.ViewHolder result = null;
 
-        Picasso.with(mContext)
-                .load(issueEntity.getTitle())
-                .error(ContextCompat.getDrawable(mContext, R.drawable.building_and_upgrade))
-                .into(holder.mIvCategoryIcon);
+        switch (viewType) {
+            case VIEW_ITEM:
+                v = LayoutInflater.from(mContext).inflate(R.layout.list_item_card, parent, false);
+                result = new IssueViewHolder(v);
+                break;
+            case VIEW_PROG:
+                v = LayoutInflater.from(mContext).inflate(R.layout.progress_item, parent, false);
+                result = new ProgressViewHolder(v);
+                break;
+        }
 
-        int daysAmount = issueEntity.getDaysAmount();
-        String strDaysAmount = (daysAmount > -1) ? String.valueOf(daysAmount)
-                .concat(" ").concat(mDays) : mEmptyString;
+        return result;
+    }
 
-        holder.mTvDaysAmount.setText(strDaysAmount);
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+
+        if (viewHolder instanceof IssueViewHolder) {
+
+            IssueViewHolder holder = (IssueViewHolder) viewHolder;
+
+            IssueEntity issueEntity = mModel.get(position);
+
+            holder.mTvCategoryTitle.setText(issueEntity.getCategory().getName());
+            holder.mTvTaskDesc.setText(issueEntity.getBody());
+            holder.mTvLikesAmount.setText(String.valueOf(issueEntity.getLikesCounter()));
+            holder.mTvDateCreated.setText(mFormatter.format(issueEntity.getCreatedDate()));
+
+            Picasso.with(mContext)
+                    .load(issueEntity.getTitle())
+                    .error(ContextCompat.getDrawable(mContext, R.drawable.building_and_upgrade))
+                    .into(holder.mIvCategoryIcon);
+
+            int daysAmount = issueEntity.getDaysAmount();
+            String strDaysAmount = (daysAmount > -1) ? String.valueOf(daysAmount)
+                    .concat(" ").concat(mDays) : mEmptyString;
+
+            holder.mTvDaysAmount.setText(strDaysAmount);
+        } else {
+            ((ProgressViewHolder) viewHolder).mProgressBar.setIndeterminate(true);
+        }
 
     }
 
@@ -131,6 +169,17 @@ public class IssueListAdapter extends RecyclerView.Adapter<IssueListAdapter.Issu
             if (mOnItemClickListener != null) {
                 mOnItemClickListener.onItemClick(mModel.get(position));
             }
+        }
+    }
+
+    public class ProgressViewHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.progress_bar)
+        ProgressBar mProgressBar;
+
+        public ProgressViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
         }
     }
 }

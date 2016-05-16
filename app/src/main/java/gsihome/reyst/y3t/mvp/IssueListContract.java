@@ -9,7 +9,11 @@ import gsihome.reyst.y3t.domain.IssueEntity;
 public interface IssueListContract {
     interface Model {
 
-        void getData(Callback callback);
+        //void getData(Callback callback);
+
+        void getDataPage(boolean first, Callback callback);
+
+        void getCachedData(Callback callback);
 
         interface Callback {
             void getResult(List<IssueEntity> data);
@@ -23,10 +27,15 @@ public interface IssueListContract {
 
         void getNextPage();
 
+        void getFirstPage();
+
+        boolean isLoading();
     }
 
     interface View {
 
         void setAdapter(RecyclerView.Adapter adapter);
+
+        void setRefreshing(boolean flag);
     }
 }

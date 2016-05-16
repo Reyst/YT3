@@ -33,6 +33,8 @@ dependencies {
     compile 'com.android.support:cardview-v7:23.3.0'
     //noinspection GradleDependency
     compile 'com.android.support:recyclerview-v7:23.3.0'
+    //noinspection GradleDependency
+    compile 'com.android.support:support-v4:23.3.0'
 
     // Picasso
     compile 'com.squareup.picasso:picasso:2.5.2'

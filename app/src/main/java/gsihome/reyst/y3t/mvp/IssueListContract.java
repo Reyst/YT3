@@ -9,16 +9,14 @@ import gsihome.reyst.y3t.domain.IssueEntity;
 public interface IssueListContract {
     interface Model {
 
-        //void getData(Callback callback);
+        interface Callback {
+
+            void getResult(List<IssueEntity> data);
+        }
 
         void getDataPage(boolean first, Callback callback);
 
         void getCachedData(Callback callback);
-
-        interface Callback {
-            void getResult(List<IssueEntity> data);
-        }
-
     }
 
     interface Presenter {

@@ -8,26 +8,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
 import com.facebook.Profile;
-import com.facebook.ProfileTracker;
-import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
 import com.facebook.login.widget.ProfilePictureView;
-
-import java.util.Collections;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import gsihome.reyst.y3t.R;
-import gsihome.reyst.y3t.domain.FBProfile;
 import gsihome.reyst.y3t.mvp.FacebookAccountContract;
 import gsihome.reyst.y3t.mvp.presenter.FacebookAccountPresenter;
-import gsihome.reyst.y3t.utils.ServiceApiHolder;
-import io.realm.Realm;
 
 public class FacebookAccountActivity extends AppCompatActivity
         implements FacebookAccountContract.View {
@@ -41,20 +30,16 @@ public class FacebookAccountActivity extends AppCompatActivity
     @BindView(R.id.user_name)
     TextView mTvName;
 
-    FacebookAccountContract.Presenter mPresenter;
-
+    private FacebookAccountContract.Presenter mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_facebook_account);
-
         ButterKnife.bind(this);
 
         mPresenter = new FacebookAccountPresenter(this, this);
-
         mPresenter.onCreate();
-
     }
 
     @Override

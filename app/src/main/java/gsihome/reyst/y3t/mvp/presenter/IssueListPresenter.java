@@ -11,18 +11,17 @@ import gsihome.reyst.y3t.adapters.IssueListAdapter;
 import gsihome.reyst.y3t.domain.IssueEntity;
 import gsihome.reyst.y3t.mvp.DetailDataContract;
 import gsihome.reyst.y3t.mvp.IssueListContract;
-import gsihome.reyst.y3t.mvp.model.DetailDataMode;
+import gsihome.reyst.y3t.mvp.model.DetailDataModel;
 import gsihome.reyst.y3t.mvp.model.IssueListModel;
 
 public class IssueListPresenter implements IssueListContract.Presenter, IssueListAdapter.OnItemClickListener {
 
-    IssueListContract.Model mModel;
+    private Context mContext;
 
-    IssueListContract.View mView;
-    Context mContext;
+    private IssueListContract.Model mModel;
+    private IssueListContract.View mView;
 
-    IssueListAdapter mIssueAdapter;
-
+    private IssueListAdapter mIssueAdapter;
     private boolean mLoading;
 
     public IssueListPresenter(Context context, IssueListContract.View view, String filter) {
@@ -31,7 +30,6 @@ public class IssueListPresenter implements IssueListContract.Presenter, IssueLis
         mIssueAdapter = new IssueListAdapter(context, this);
         mModel = new IssueListModel(context, filter);
     }
-
 
     @Override
     public void init() {
@@ -67,7 +65,9 @@ public class IssueListPresenter implements IssueListContract.Presenter, IssueLis
             @Override
             public void getResult(List<IssueEntity> data) {
 
-                mIssueAdapter.remove(nullPosition);
+                if (nullPosition < mIssueAdapter.size()) {
+                    mIssueAdapter.remove(nullPosition);
+                }
 
                 for (IssueEntity entity : data) {
                     if (!mIssueAdapter.contains(entity)) {
@@ -106,7 +106,7 @@ public class IssueListPresenter implements IssueListContract.Presenter, IssueLis
     @Override
     public void onItemClick(IssueEntity entity) {
 
-        DetailDataContract.Model model = new DetailDataMode(mContext, entity);
+        DetailDataContract.Model model = new DetailDataModel(mContext, entity);
 
         Intent intent = new Intent(mContext, DetailActivity.class);
         intent.putExtra(mContext.getString(R.string.key_for_entity), model);

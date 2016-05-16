@@ -54,7 +54,6 @@ public class ImageGalleryAdapter extends RecyclerView.Adapter<ImageGalleryAdapte
     @Override
     public void onBindViewHolder(ImageViewHolder holder, final int position) {
         String path = mModel.get(position);
-        final int index = mModel.indexOf(path);
 
         Picasso.with(mContext)
                 .load(path)
@@ -65,8 +64,9 @@ public class ImageGalleryAdapter extends RecyclerView.Adapter<ImageGalleryAdapte
         holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.setTag(mContext.getResources().getString(R.string.str_image) + " #" + String.valueOf(index));
-                mOnClickListener.onClick(v);
+                if (mOnClickListener != null) {
+                    mOnClickListener.onClick(v);
+                }
             }
         });
     }

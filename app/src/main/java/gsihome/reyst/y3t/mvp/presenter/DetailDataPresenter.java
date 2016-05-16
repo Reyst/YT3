@@ -11,10 +11,11 @@ import gsihome.reyst.y3t.R;
 import gsihome.reyst.y3t.adapters.ImageGalleryAdapter;
 import gsihome.reyst.y3t.mvp.DetailDataContract;
 
-public class DetailDataPresenter implements DetailDataContract.Presenter, ImageGalleryAdapter.OnItemClickListener {
+public class DetailDataPresenter implements DetailDataContract.Presenter,
+        ImageGalleryAdapter.OnItemClickListener {
 
     private Context mContext;
-    private DetailDataContract.View mDataView;
+    private DetailDataContract.View mView;
 
     private DetailDataContract.Model mModel;
 
@@ -25,7 +26,7 @@ public class DetailDataPresenter implements DetailDataContract.Presenter, ImageG
     @Override
     public void onCreate(Intent intent, DetailDataContract.View dataView) {
 
-        mDataView = dataView;
+        mView = dataView;
 
         Serializable data = intent.getSerializableExtra(mContext.getString(R.string.key_for_entity));
 
@@ -33,27 +34,22 @@ public class DetailDataPresenter implements DetailDataContract.Presenter, ImageG
             mModel = (DetailDataContract.Model) data;
             setEntityData();
         } else {
-            mDataView.closeView();
+            mView.closeView();
         }
     }
 
     @Override
     public void onDestroy() {
-
-    }
-
-    @Override
-    public void onModelChange() {
-        setEntityData();
+        mModel = null;
     }
 
     private void setEntityData() {
 
-        mDataView.setTitle(mModel.getTitle());
-        mDataView.setDateValues(mModel.getCreatedDate(),
+        mView.setTitle(mModel.getTitle());
+        mView.setDateValues(mModel.getCreatedDate(),
                 mModel.getStartDate(),
                 mModel.getDeadline());
-        mDataView.setStringValues(mModel.getCategory(),
+        mView.setStringValues(mModel.getCategory(),
                 mModel.getResponsible(),
                 mModel.getDescription(),
                 mModel.getState());
@@ -61,11 +57,11 @@ public class DetailDataPresenter implements DetailDataContract.Presenter, ImageG
         List<String> urlList = mModel.getUrlList();
         RecyclerView.Adapter adapter = new ImageGalleryAdapter(mContext, urlList, this);
 
-        mDataView.setAdapter(adapter);
+        mView.setAdapter(adapter);
     }
 
     @Override
     public void onClick(android.view.View view) {
-        mDataView.onClick(view);
+        mView.onClick(view);
     }
 }

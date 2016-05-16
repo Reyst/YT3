@@ -63,21 +63,6 @@ public class ServiceApiHolder {
             }
         };
 
-//        JsonDeserializer<Double> doubleDeserializer = new JsonDeserializer<Double>() {
-//            @Override
-//            public Double deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
-//                    throws JsonParseException {
-//                try {
-//                    return json.getAsDouble();
-//                } catch (ClassCastException ex) {
-//                    return 0.0;
-//                } catch (NumberFormatException ex) {
-//                    return 0.0;
-//                }
-//            }
-//        };
-
-
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(Date.class, dateDeserializer)
                 .create();

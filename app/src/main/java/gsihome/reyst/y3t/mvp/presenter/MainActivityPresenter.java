@@ -10,9 +10,9 @@ import gsihome.reyst.y3t.mvp.model.MainActivityModel;
 
 public class MainActivityPresenter implements MainActivityContract.Presenter {
 
-    private MainActivityContract.View mView;
     private Context mContext;
 
+    private MainActivityContract.View mView;
     private MainActivityContract.Model mModel;
 
     public MainActivityPresenter(Context context, MainActivityContract.View view) {

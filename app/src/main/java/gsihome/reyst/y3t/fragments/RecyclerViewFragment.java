@@ -61,7 +61,6 @@ public class RecyclerViewFragment extends Fragment implements IssueListContract.
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(llm);
-
         initEvents();
 
         mPresenter.init();
@@ -77,9 +76,7 @@ public class RecyclerViewFragment extends Fragment implements IssueListContract.
                 super.onScrolled(recyclerView, dx, dy);
                 RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
                 if (layoutManager instanceof LinearLayoutManager) {
-
                     LinearLayoutManager lManager = (LinearLayoutManager) layoutManager;
-
                     int totalItemCount = lManager.getItemCount();
                     int lastVisibleItem = lManager.findLastVisibleItemPosition();
 

@@ -12,7 +12,8 @@ public class IssueListPresenterHolder {
 
     private static Map<IssueListContract.View, IssueListContract.Presenter> sPresenters;
 
-    public static IssueListContract.Presenter getPresenter(Context context, IssueListContract.View view, String filter) {
+    public static IssueListContract.Presenter getPresenter(Context context,
+                                                           IssueListContract.View view, String filter) {
 
         if (sPresenters == null) {
             sPresenters = new HashMap<>();

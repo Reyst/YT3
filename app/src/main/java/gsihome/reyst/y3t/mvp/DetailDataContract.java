@@ -10,17 +10,24 @@ public interface DetailDataContract {
     interface Model extends Serializable {
 
         long getId();
+
         String getTitle();
+
         String getState();
+
         List<String> getUrlList();
+
         String getDescription();
+
         String getResponsible();
+
         String getCategory();
+
         String getStartDate();
+
         String getCreatedDate();
+
         String getDeadline();
-
-
     }
 
     interface Presenter {
@@ -28,13 +35,9 @@ public interface DetailDataContract {
         void onCreate(Intent intent, View dataView);
 
         void onDestroy();
-
-        void onModelChange();
-
     }
 
     interface View {
-
 
         void closeView();
 

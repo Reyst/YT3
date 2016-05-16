@@ -21,14 +21,15 @@ import retrofit2.Response;
 
 public class IssueListModel implements IssueListContract.Model {
 
-    public static final String ERROR_TAG = "RETROFIT ERROR";
-    private Context mContext;
-    private String mFilter;
+    private static final String ERROR_TAG = "RETROFIT ERROR";
 
-    private long[] mQueryFilter;
+    private Context mContext;
 
     private TicketService mTicketService;
     private Realm mRealmService;
+
+    private String mFilter;
+    private long[] mQueryFilter;
 
     private int mPageSize;
     private int mOffset;
@@ -36,25 +37,25 @@ public class IssueListModel implements IssueListContract.Model {
     public IssueListModel(Context context, String filter) {
 
         mContext = context;
+
         mFilter = filter;
-
-        if (!TextUtils.isEmpty(mFilter)) {
-
-            String[] filterParts = mFilter.split(context.getString(R.string.str_filter_delimiter));
-
-            mQueryFilter = new long[filterParts.length];
-            for (int i = 0; i < filterParts.length; i++) {
-                mQueryFilter[i] = Long.parseLong(filterParts[i]);
-            }
-
-        }
+        initQueryFilter();
 
         mTicketService = ServiceApiHolder.getTicketService(context);
         mRealmService = ServiceApiHolder.getRealmService(context);
 
         mPageSize = context.getResources().getInteger(R.integer.data_page_size);
         mOffset = 0;
+    }
 
+    private void initQueryFilter() {
+        if (!TextUtils.isEmpty(mFilter)) {
+            String[] filterParts = mFilter.split(mContext.getString(R.string.str_filter_delimiter));
+            mQueryFilter = new long[filterParts.length];
+            for (int i = 0; i < filterParts.length; i++) {
+                mQueryFilter[i] = Long.parseLong(filterParts[i]);
+            }
+        }
     }
 
     @Override
@@ -70,7 +71,12 @@ public class IssueListModel implements IssueListContract.Model {
             mOffset = 0;
         }
 
-        Call<List<IssueEntity>> call = mTicketService.getListByStateFilter(mFilter, mPageSize, mOffset);
+        Call<List<IssueEntity>> call;
+        if (TextUtils.isEmpty(mFilter)) {
+            call = mTicketService.getAll(mPageSize, mOffset);
+        } else {
+            call = mTicketService.getListByStateFilter(mFilter, mPageSize, mOffset);
+        }
 
         call.enqueue(new retrofit2.Callback<List<IssueEntity>>() {
             @Override
@@ -94,25 +100,14 @@ public class IssueListModel implements IssueListContract.Model {
                 callback.getResult(new ArrayList<IssueEntity>());
             }
         });
-
     }
 
     @Override
     public void getCachedData(final Callback callback) {
-//        mRealmService.executeTransactionAsync(new Realm.Transaction() {
-//            @Override
-//            public void execute(Realm realm) {
-                RealmQuery<IssueEntity> query = getIssueEntityRealmQuery(mRealmService);
-                RealmResults<IssueEntity> result = query.findAll();
-                mOffset = result.size();
-                callback.getResult(result);
-//            }
-//        }, new Realm.Transaction.OnError() {
-//            @Override
-//            public void onError(Throwable error) {
-//                callback.getResult(null);
-//            }
-//        });
+        RealmQuery<IssueEntity> query = getIssueEntityRealmQuery(mRealmService);
+        RealmResults<IssueEntity> result = query.findAll();
+        mOffset = result.size();
+        callback.getResult(result);
     }
 
     @NonNull
@@ -126,7 +121,6 @@ public class IssueListModel implements IssueListContract.Model {
                 query.equalTo("state.id", param);
             }
         }
-
         return query;
     }
 }

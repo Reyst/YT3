@@ -13,10 +13,14 @@ public interface TicketService {
     Call<List<IssueEntity>> getListByStateFilter(@Query("state") String filter);
 
     @GET("tickets")
-    Call<List<IssueEntity>> getListByStateFilter(@Query("state") String filter, @Query("amount") int amount, @Query("offset") int offset);
-
+    Call<List<IssueEntity>> getListByStateFilter(@Query("state") String filter,
+                                                 @Query("amount") int amount,
+                                                 @Query("offset") int offset);
 
     @GET("tickets")
     Call<List<IssueEntity>> getAll();
+
+    @GET("tickets")
+    Call<List<IssueEntity>> getAll(@Query("amount") int amount, @Query("offset") int offset);
 
 }

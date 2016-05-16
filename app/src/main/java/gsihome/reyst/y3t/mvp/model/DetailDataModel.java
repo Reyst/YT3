@@ -13,7 +13,10 @@ import gsihome.reyst.y3t.domain.IssueEntity;
 import gsihome.reyst.y3t.domain.Performer;
 import gsihome.reyst.y3t.mvp.DetailDataContract;
 
-public class DetailDataMode implements DetailDataContract.Model {
+public class DetailDataModel implements DetailDataContract.Model {
+
+    private DateFormat mFormatter;
+    private String mEmptyString;
 
     private long mId;
     private String mCategory;
@@ -26,14 +29,11 @@ public class DetailDataMode implements DetailDataContract.Model {
     private List<String> mImageUrls;
     private String mResponsible;
 
-    private DateFormat mFormatter;
-
-    private String mEmptyString;
-
-    public DetailDataMode(Context context, IssueEntity entity) {
+    public DetailDataModel(Context context, IssueEntity entity) {
 
         mEmptyString = context.getString(R.string.emptyString);
         String basePictureUrl = context.getString(R.string.base_picture_url);
+        mFormatter = android.text.format.DateFormat.getMediumDateFormat(context);
 
         mId = entity.getId();
         mCategory = entity.getCategory().getName();
@@ -51,9 +51,6 @@ public class DetailDataMode implements DetailDataContract.Model {
 
         List<Performer> performerList = entity.getPerformers();
         mResponsible = (!performerList.isEmpty()) ? performerList.get(0).getOrganization() : mEmptyString;
-
-        mFormatter = android.text.format.DateFormat.getMediumDateFormat(context);
-
     }
 
     @Override

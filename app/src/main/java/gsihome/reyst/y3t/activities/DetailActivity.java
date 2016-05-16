@@ -46,7 +46,7 @@ public class DetailActivity extends AppCompatActivity implements
 
     ActionBar mActionBar;
 
-    private DetailDataContract.Presenter mDataPresenter;
+    private DetailDataContract.Presenter mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,17 +60,10 @@ public class DetailActivity extends AppCompatActivity implements
             mActionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        mDataPresenter = new DetailDataPresenter(this);
-        mDataPresenter.onCreate(getIntent(), this);
+        mPresenter = new DetailDataPresenter(this);
+        mPresenter.onCreate(getIntent(), this);
 
         initRecyclerView();
-
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mDataPresenter.onDestroy();
     }
 
     private void initRecyclerView() {
@@ -85,17 +78,21 @@ public class DetailActivity extends AppCompatActivity implements
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.onDestroy();
+    }
+
+    @Override
     public void onClick(android.view.View v) {
         Toast.makeText(this, v.getClass().getSimpleName(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         if (item.getItemId() == android.R.id.home) {
             finish();
         }
-
         return super.onOptionsItemSelected(item);
     }
 

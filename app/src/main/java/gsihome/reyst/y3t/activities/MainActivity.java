@@ -39,14 +39,10 @@ public class MainActivity extends AppCompatActivity
 
     private MainActivityContract.Presenter mPresenter;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        mPresenter = new MainActivityPresenter(this, this);
-
         ButterKnife.bind(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -61,6 +57,7 @@ public class MainActivity extends AppCompatActivity
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        mPresenter = new MainActivityPresenter(this, this);
         mPresenter.onCreate();
     }
 
@@ -70,7 +67,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void setPagerAdapter(PagerAdapter adapter){
+    public void setPagerAdapter(PagerAdapter adapter) {
         if (mTabLayout != null && mViewPager != null) {
             mViewPager.setAdapter(adapter);
             mTabLayout.setupWithViewPager(mViewPager);
@@ -127,7 +124,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+
         int id = item.getItemId();
 
         switch (id) {
@@ -136,14 +133,11 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_appeals_on_map:
                 break;
             case R.id.nav_login:
-
                 mPresenter.onLoginClick();
-
                 break;
         }
 
         mDrawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
 }

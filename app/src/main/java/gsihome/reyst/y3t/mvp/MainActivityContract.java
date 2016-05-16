@@ -8,12 +8,12 @@ import java.util.List;
 import gsihome.reyst.y3t.adapters.PagerAdapter;
 
 public interface MainActivityContract {
+
     interface Model {
 
         List<Fragment> getFragments();
 
         List<String> getFragmentNames();
-
     }
 
     interface Presenter {

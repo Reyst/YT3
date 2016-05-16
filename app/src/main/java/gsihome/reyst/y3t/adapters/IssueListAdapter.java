@@ -1,6 +1,7 @@
 package gsihome.reyst.y3t.adapters;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -36,6 +37,7 @@ public class IssueListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     private String mDays;
     private String mEmptyString;
+    private Drawable mCategoryIconPlaceholder;
 
     public IssueListAdapter(Context context, OnItemClickListener listener) {
 
@@ -43,6 +45,7 @@ public class IssueListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         mDays = context.getString(R.string.days);
         mEmptyString = context.getString(R.string.emptyString);
+        mCategoryIconPlaceholder = ContextCompat.getDrawable(context, R.drawable.building_and_upgrade);
 
         mOnItemClickListener = listener;
         mFormatter = ServiceApiHolder.getFormatter(context);
@@ -117,8 +120,9 @@ public class IssueListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             holder.mTvDateCreated.setText(mFormatter.format(issueEntity.getCreatedDate()));
 
             Picasso.with(mContext)
-                    .load(issueEntity.getTitle())
-                    .error(ContextCompat.getDrawable(mContext, R.drawable.building_and_upgrade))
+                    .load(issueEntity.getCategory().getName()) // How can get category icon?
+                    .placeholder(mCategoryIconPlaceholder)
+                    .error(mCategoryIconPlaceholder)
                     .into(holder.mIvCategoryIcon);
 
             int daysAmount = issueEntity.getDaysAmount();
@@ -129,7 +133,6 @@ public class IssueListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         } else {
             ((ProgressViewHolder) viewHolder).mProgressBar.setIndeterminate(true);
         }
-
     }
 
     @Override
@@ -165,7 +168,6 @@ public class IssueListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
-
             if (mOnItemClickListener != null) {
                 mOnItemClickListener.onItemClick(mModel.get(position));
             }

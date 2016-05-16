@@ -15,7 +15,6 @@
 
     <!--guides-->
     <dimen name="list_item_margin">8dp</dimen>
-    <dimen name="list_item_margin_2">16dp</dimen>
 
     <dimen name="list_item_card_height">126dp</dimen>
     <dimen name="list_item_left_divider_margin">80dp</dimen>

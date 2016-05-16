@@ -19,4 +19,6 @@
     <string name="str_section_value">Ляльки</string>
     <string name="str_done">Виконано</string>
     <string name="str_wait">Очікує</string>
+    <string name="empty_date_message">Пуста дата</string>
+    <string name="logout">Вийти</string>
 </resources>

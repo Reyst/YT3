@@ -60,7 +60,7 @@ public class FacebookAccountActivity extends AppCompatActivity
     }
 
     @OnClick(R.id.logout_btn)
-    public void onClickBtnLogout(View view) {
+    public void onClickBtnLogout() {
         mPresenter.logOut();
     }
 

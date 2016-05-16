@@ -56,8 +56,8 @@ public class IssueListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         mModel = model;
     }
 
-    public boolean addAll(Collection<? extends IssueEntity> collection) {
-        return mModel.addAll(collection);
+    public void addAll(Collection<? extends IssueEntity> collection) {
+        mModel.addAll(collection);
     }
 
     public int size() {
@@ -68,12 +68,12 @@ public class IssueListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         mModel.clear();
     }
 
-    public boolean add(IssueEntity object) {
-        return mModel.add(object);
+    public void add(IssueEntity object) {
+        mModel.add(object);
     }
 
-    public IssueEntity remove(int location) {
-        return mModel.remove(location);
+    public void remove(int location) {
+        mModel.remove(location);
     }
 
     public boolean contains(IssueEntity entity) {

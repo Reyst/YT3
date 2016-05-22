@@ -39,8 +39,7 @@ public class IssueListPresenter implements IssueListContract.Presenter,
 
         mModel.getCachedData(new IssueListContract.Model.Callback() {
             @Override
-            public void onSuccess(List<IssueEntity> data) {
-                mLoading = false;
+            public void onGetResult(List<IssueEntity> data) {
                 if (data == null || data.size() == 0) {
                     getFirstPage();
                 } else {
@@ -50,17 +49,12 @@ public class IssueListPresenter implements IssueListContract.Presenter,
             }
 
             @Override
-            public void onFailure(Throwable throwable) {
-                mView.showMessage(throwable.getLocalizedMessage());
-                mLoading = false;
+            public void onFailure(Throwable error) {
                 getFirstPage();
             }
         });
 
         mView.setAdapter(mIssueAdapter);
-//        if (mIssueAdapter.size() == 0) {
-//            getNextPage();
-//        }
     }
 
     @Override
@@ -74,7 +68,7 @@ public class IssueListPresenter implements IssueListContract.Presenter,
 
         mModel.getDataPage(false, new IssueListContract.Model.Callback() {
             @Override
-            public void onSuccess(List<IssueEntity> data) {
+            public void onGetResult(List<IssueEntity> data) {
 
                 if (nullPosition < mIssueAdapter.size()) {
                     mIssueAdapter.remove(nullPosition);
@@ -86,20 +80,19 @@ public class IssueListPresenter implements IssueListContract.Presenter,
                     }
                 }
                 mIssueAdapter.notifyDataSetChanged();
-                loadingEnd();
+                mLoading = false;
             }
 
             @Override
-            public void onFailure(Throwable throwable) {
-                mView.showMessage(throwable.getLocalizedMessage());
-                loadingEnd();
+            public void onFailure(Throwable error) {
+                if (nullPosition < mIssueAdapter.size()) {
+                    mIssueAdapter.remove(nullPosition);
+                    mIssueAdapter.notifyItemRemoved(nullPosition);
+                }
+                mLoading = false;
+                mView.showMessage(error.getLocalizedMessage());
             }
         });
-    }
-
-    private void loadingEnd() {
-        mLoading = false;
-        mView.setRefreshing(false);
     }
 
     @Override
@@ -109,17 +102,20 @@ public class IssueListPresenter implements IssueListContract.Presenter,
 
         mModel.getDataPage(true, new IssueListContract.Model.Callback() {
             @Override
-            public void onSuccess(List<IssueEntity> data) {
+            public void onGetResult(List<IssueEntity> data) {
                 mIssueAdapter.clear();
                 mIssueAdapter.addAll(data);
                 mIssueAdapter.notifyDataSetChanged();
-                loadingEnd();
+                mLoading = false;
+                mView.setRefreshing(false);
             }
 
             @Override
-            public void onFailure(Throwable throwable) {
-                mView.showMessage(throwable.getLocalizedMessage());
-                loadingEnd();
+            public void onFailure(Throwable error) {
+                mLoading = false;
+                mView.setRefreshing(false);
+
+                mView.showMessage(error.getLocalizedMessage());
             }
         });
 
@@ -128,13 +124,6 @@ public class IssueListPresenter implements IssueListContract.Presenter,
     @Override
     public boolean isLoading() {
         return mLoading;
-    }
-
-    @Override
-    public void onDestroy() {
-        mModel.onDestroy();
-        mModel = null;
-        mView = null;
     }
 
     @Override

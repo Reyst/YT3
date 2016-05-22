@@ -11,16 +11,14 @@ public interface IssueListContract {
 
         interface Callback {
 
-            void onSuccess(List<IssueEntity> data);
+            void onGetResult(List<IssueEntity> data);
 
-            void onFailure(Throwable throwable);
+            void onFailure(Throwable error);
         }
 
         void getDataPage(boolean first, Callback callback);
 
         void getCachedData(Callback callback);
-
-        void onDestroy();
     }
 
     interface Presenter {
@@ -32,8 +30,6 @@ public interface IssueListContract {
         void getFirstPage();
 
         boolean isLoading();
-
-        void onDestroy();
     }
 
     interface View {

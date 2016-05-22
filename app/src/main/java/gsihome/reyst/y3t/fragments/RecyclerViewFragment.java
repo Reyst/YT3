@@ -31,7 +31,7 @@ public class RecyclerViewFragment extends Fragment implements IssueListContract.
     @BindView(R.id.swipe_container)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
-    private IssueListContract.Presenter mPresenter;//
+    private IssueListContract.Presenter mPresenter;
 
     public static Fragment getInstance(String filter) {
 
@@ -87,7 +87,7 @@ public class RecyclerViewFragment extends Fragment implements IssueListContract.
                     int totalItemCount = lManager.getItemCount();
                     int lastVisibleItem = lManager.findLastVisibleItemPosition();
 
-                    if (!mPresenter.isLoading() && totalItemCount <= (lastVisibleItem + VISIBLE_THRESHOLD)) {
+                    if (!mPresenter.isLoading() && dy >= 0 && totalItemCount <= (lastVisibleItem + VISIBLE_THRESHOLD)) {
                         mPresenter.getNextPage();
                     }
                 }
@@ -107,14 +107,6 @@ public class RecyclerViewFragment extends Fragment implements IssueListContract.
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-
-        IssueListPresenterHolder.remove(this);
-        mPresenter.onDestroy();
-    }
-
-    @Override
     public void setAdapter(RecyclerView.Adapter adapter) {
         mRecyclerView.setAdapter(adapter);
     }
@@ -128,7 +120,7 @@ public class RecyclerViewFragment extends Fragment implements IssueListContract.
     public void showMessage(String message) {
         Context context = getContext();
         if (context != null) {
-            Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
         }
     }
 }

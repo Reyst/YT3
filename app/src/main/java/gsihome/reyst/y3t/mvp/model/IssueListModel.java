@@ -3,7 +3,9 @@ package gsihome.reyst.y3t.mvp.model;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import gsihome.reyst.y3t.R;
@@ -18,6 +20,8 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 public class IssueListModel implements IssueListContract.Model {
+
+    private static final String ERROR_TAG = "RETROFIT ERROR";
 
     private Context mContext;
 
@@ -55,20 +59,8 @@ public class IssueListModel implements IssueListContract.Model {
     }
 
     @Override
-    public void getDataPage(boolean first, final Callback callback) {
+    public void getDataPage(final boolean first, final Callback callback) {
         if (first) {
-            mRealmService.executeTransactionAsync(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmQuery<IssueEntity> query = getIssueEntityRealmQuery(realm);
-                    query.findAll().deleteAllFromRealm();
-                }
-            }, new Realm.Transaction.OnError() {
-                @Override
-                public void onError(Throwable error) {
-                    callback.onFailure(error);
-                }
-            });
             mOffset = 0;
         }
 
@@ -89,10 +81,16 @@ public class IssueListModel implements IssueListContract.Model {
                 mRealmService.executeTransactionAsync(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
+
+                        if (first) {
+                            getIssueEntityRealmQuery(realm)
+                                    .findAll().deleteAllFromRealm();
+                        }
+
                         realm.copyToRealmOrUpdate(result);
                     }
                 });
-                callback.onSuccess(result);
+                callback.onGetResult(result);
             }
 
             @Override
@@ -104,28 +102,14 @@ public class IssueListModel implements IssueListContract.Model {
 
     @Override
     public void getCachedData(final Callback callback) {
-        mRealmService.executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmQuery<IssueEntity> query = getIssueEntityRealmQuery(realm);
-                RealmResults<IssueEntity> result = query.findAll();
-                mOffset = result.size();
-                callback.onSuccess(result);
-            }
-        }, new Realm.Transaction.OnError() {
-            @Override
-            public void onError(Throwable error) {
-                callback.onFailure(error);
-            }
-        });
-    }
-
-    @Override
-    public void onDestroy() {
-        if (!mRealmService.isClosed()) {
-            mRealmService.close();
+        RealmQuery<IssueEntity> query = getIssueEntityRealmQuery(mRealmService);
+        RealmResults<IssueEntity> result = query.findAll();
+        mOffset = result.size();
+        if (mOffset == 0) {
+            callback.onFailure(null);
+        } else {
+            callback.onGetResult(result);
         }
-        mTicketService = null;
     }
 
     @NonNull

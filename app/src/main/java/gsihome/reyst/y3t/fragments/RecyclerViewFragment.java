@@ -1,5 +1,6 @@
 package gsihome.reyst.y3t.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -7,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -18,13 +20,18 @@ public class RecyclerViewFragment extends Fragment implements IssueListContract.
 
     private static final String STR_KEY_FILTER = "filter";
 
+    private static final int VISIBLE_THRESHOLD = 1; // I used this value, because i like the visual
+                                                    // effect with progress bar on the last element
+                                                    // of the list while a next page of the data is
+                                                    // being loaded.
+
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
 
     @BindView(R.id.swipe_container)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
-    private IssueListContract.Presenter mPresenter;
+    private IssueListContract.Presenter mPresenter;//
 
     public static Fragment getInstance(String filter) {
 
@@ -80,8 +87,7 @@ public class RecyclerViewFragment extends Fragment implements IssueListContract.
                     int totalItemCount = lManager.getItemCount();
                     int lastVisibleItem = lManager.findLastVisibleItemPosition();
 
-                    int visibleThreshold = 1;//lastVisibleItem - lManager.findFirstVisibleItemPosition();
-                    if (!mPresenter.isLoading() && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
+                    if (!mPresenter.isLoading() && totalItemCount <= (lastVisibleItem + VISIBLE_THRESHOLD)) {
                         mPresenter.getNextPage();
                     }
                 }
@@ -101,6 +107,14 @@ public class RecyclerViewFragment extends Fragment implements IssueListContract.
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        IssueListPresenterHolder.remove(this);
+        mPresenter.onDestroy();
+    }
+
+    @Override
     public void setAdapter(RecyclerView.Adapter adapter) {
         mRecyclerView.setAdapter(adapter);
     }
@@ -108,5 +122,13 @@ public class RecyclerViewFragment extends Fragment implements IssueListContract.
     @Override
     public void setRefreshing(boolean flag) {
         mSwipeRefreshLayout.setRefreshing(flag);
+    }
+
+    @Override
+    public void showMessage(String message) {
+        Context context = getContext();
+        if (context != null) {
+            Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+        }
     }
 }

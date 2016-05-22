@@ -8,24 +8,26 @@ import io.realm.annotations.RealmClass;
 public class FBProfile implements RealmModel {
 
     @PrimaryKey
-    String id;
+    private String id;
 
-    String firstName;
+    private String firstName;
 
-    String middleName;
+    private String middleName;
 
-    String lastName;
+    private String lastName;
 
-    String name;
+    private String name;
 
-    String linkUri;
+    private String linkUri;
 
-    String token;
+    private String token;
 
     public FBProfile() {
     }
 
-    public FBProfile(String id, String firstName, String middleName, String lastName, String name, String linkUri, String token) {
+    public FBProfile(String id, String firstName, String middleName,
+                     String lastName, String name, String linkUri, String token) {
+
         this.id = id;
         this.firstName = firstName;
         this.middleName = middleName;

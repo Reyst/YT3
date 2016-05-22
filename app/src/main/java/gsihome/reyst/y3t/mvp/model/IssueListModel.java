@@ -3,9 +3,7 @@ package gsihome.reyst.y3t.mvp.model;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.util.Log;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import gsihome.reyst.y3t.R;
@@ -20,8 +18,6 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 public class IssueListModel implements IssueListContract.Model {
-
-    private static final String ERROR_TAG = "RETROFIT ERROR";
 
     private Context mContext;
 
@@ -67,6 +63,11 @@ public class IssueListModel implements IssueListContract.Model {
                     RealmQuery<IssueEntity> query = getIssueEntityRealmQuery(realm);
                     query.findAll().deleteAllFromRealm();
                 }
+            }, new Realm.Transaction.OnError() {
+                @Override
+                public void onError(Throwable error) {
+                    callback.onFailure(error);
+                }
             });
             mOffset = 0;
         }
@@ -91,23 +92,40 @@ public class IssueListModel implements IssueListContract.Model {
                         realm.copyToRealmOrUpdate(result);
                     }
                 });
-                callback.getResult(result);
+                callback.onSuccess(result);
             }
 
             @Override
             public void onFailure(Call<List<IssueEntity>> call, Throwable t) {
-                Log.d(ERROR_TAG, t.getLocalizedMessage());
-                callback.getResult(new ArrayList<IssueEntity>());
+                callback.onFailure(t);
             }
         });
     }
 
     @Override
     public void getCachedData(final Callback callback) {
-        RealmQuery<IssueEntity> query = getIssueEntityRealmQuery(mRealmService);
-        RealmResults<IssueEntity> result = query.findAll();
-        mOffset = result.size();
-        callback.getResult(result);
+        mRealmService.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmQuery<IssueEntity> query = getIssueEntityRealmQuery(realm);
+                RealmResults<IssueEntity> result = query.findAll();
+                mOffset = result.size();
+                callback.onSuccess(result);
+            }
+        }, new Realm.Transaction.OnError() {
+            @Override
+            public void onError(Throwable error) {
+                callback.onFailure(error);
+            }
+        });
+    }
+
+    @Override
+    public void onDestroy() {
+        if (!mRealmService.isClosed()) {
+            mRealmService.close();
+        }
+        mTicketService = null;
     }
 
     @NonNull

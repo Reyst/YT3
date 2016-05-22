@@ -14,7 +14,8 @@ import gsihome.reyst.y3t.mvp.IssueListContract;
 import gsihome.reyst.y3t.mvp.model.DetailDataModel;
 import gsihome.reyst.y3t.mvp.model.IssueListModel;
 
-public class IssueListPresenter implements IssueListContract.Presenter, IssueListAdapter.OnItemClickListener {
+public class IssueListPresenter implements IssueListContract.Presenter,
+        IssueListAdapter.OnItemClickListener {
 
     private Context mContext;
 
@@ -34,9 +35,12 @@ public class IssueListPresenter implements IssueListContract.Presenter, IssueLis
     @Override
     public void init() {
 
+        mLoading = true;
+
         mModel.getCachedData(new IssueListContract.Model.Callback() {
             @Override
-            public void getResult(List<IssueEntity> data) {
+            public void onSuccess(List<IssueEntity> data) {
+                mLoading = false;
                 if (data == null || data.size() == 0) {
                     getFirstPage();
                 } else {
@@ -44,12 +48,19 @@ public class IssueListPresenter implements IssueListContract.Presenter, IssueLis
                     mIssueAdapter.notifyDataSetChanged();
                 }
             }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                mView.showMessage(throwable.getLocalizedMessage());
+                mLoading = false;
+                getFirstPage();
+            }
         });
 
         mView.setAdapter(mIssueAdapter);
-        if (mIssueAdapter.size() == 0) {
-            getNextPage();
-        }
+//        if (mIssueAdapter.size() == 0) {
+//            getNextPage();
+//        }
     }
 
     @Override
@@ -63,7 +74,7 @@ public class IssueListPresenter implements IssueListContract.Presenter, IssueLis
 
         mModel.getDataPage(false, new IssueListContract.Model.Callback() {
             @Override
-            public void getResult(List<IssueEntity> data) {
+            public void onSuccess(List<IssueEntity> data) {
 
                 if (nullPosition < mIssueAdapter.size()) {
                     mIssueAdapter.remove(nullPosition);
@@ -75,9 +86,20 @@ public class IssueListPresenter implements IssueListContract.Presenter, IssueLis
                     }
                 }
                 mIssueAdapter.notifyDataSetChanged();
-                mLoading = false;
+                loadingEnd();
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                mView.showMessage(throwable.getLocalizedMessage());
+                loadingEnd();
             }
         });
+    }
+
+    private void loadingEnd() {
+        mLoading = false;
+        mView.setRefreshing(false);
     }
 
     @Override
@@ -87,12 +109,17 @@ public class IssueListPresenter implements IssueListContract.Presenter, IssueLis
 
         mModel.getDataPage(true, new IssueListContract.Model.Callback() {
             @Override
-            public void getResult(List<IssueEntity> data) {
+            public void onSuccess(List<IssueEntity> data) {
                 mIssueAdapter.clear();
                 mIssueAdapter.addAll(data);
                 mIssueAdapter.notifyDataSetChanged();
-                mLoading = false;
-                mView.setRefreshing(false);
+                loadingEnd();
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                mView.showMessage(throwable.getLocalizedMessage());
+                loadingEnd();
             }
         });
 
@@ -104,8 +131,17 @@ public class IssueListPresenter implements IssueListContract.Presenter, IssueLis
     }
 
     @Override
+    public void onDestroy() {
+        mModel.onDestroy();
+        mModel = null;
+        mView = null;
+    }
+
+    @Override
     public void onItemClick(IssueEntity entity) {
 
+        // The Id of the entity can be sent as a param for the Detail Activity,
+        // but sending instance of the model is better.
         DetailDataContract.Model model = new DetailDataModel(mContext, entity);
 
         Intent intent = new Intent(mContext, DetailActivity.class);

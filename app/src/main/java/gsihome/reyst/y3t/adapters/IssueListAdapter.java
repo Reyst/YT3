@@ -120,7 +120,7 @@ public class IssueListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             holder.mTvDateCreated.setText(mFormatter.format(issueEntity.getCreatedDate()));
 
             Picasso.with(mContext)
-                    .load(issueEntity.getCategory().getName()) // How can get category icon?
+                    .load(issueEntity.getCategory().getName()) // How can a category icon be got?
                     .placeholder(mCategoryIconPlaceholder)
                     .error(mCategoryIconPlaceholder)
                     .into(holder.mIvCategoryIcon);

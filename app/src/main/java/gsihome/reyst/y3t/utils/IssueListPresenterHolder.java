@@ -29,5 +29,7 @@ public class IssueListPresenterHolder {
         return result;
     }
 
-
+    public static IssueListContract.Presenter remove(IssueListContract.View view) {
+        return sPresenters.remove(view);
+    }
 }

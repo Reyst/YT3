@@ -20,7 +20,6 @@ import gsihome.reyst.y3t.rest.TicketService;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ServiceApiHolder {
@@ -70,7 +69,6 @@ public class ServiceApiHolder {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(context.getString(R.string.base_api_url))
                 .addConverterFactory(GsonConverterFactory.create(gson))
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
 
         sTicketService = retrofit.create(TicketService.class);

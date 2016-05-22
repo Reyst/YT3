@@ -73,7 +73,8 @@ public class FacebookAccountPresenter implements FacebookAccountContract.Present
             }
         });
 
-        LoginManager.getInstance().logInWithReadPermissions(mView.getActivity(), Collections.singletonList("public_profile"));
+        LoginManager.getInstance()
+                .logInWithReadPermissions(mView.getActivity(), Collections.singletonList("public_profile"));
     }
 
     @Override

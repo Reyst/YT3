@@ -3,9 +3,7 @@ package gsihome.reyst.y3t.mvp.model;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.util.Log;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import gsihome.reyst.y3t.R;
@@ -20,8 +18,6 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 public class IssueListModel implements IssueListContract.Model {
-
-    private static final String ERROR_TAG = "RETROFIT ERROR";
 
     private Context mContext;
 

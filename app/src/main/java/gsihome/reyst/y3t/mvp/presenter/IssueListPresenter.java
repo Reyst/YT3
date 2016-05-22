@@ -40,12 +40,10 @@ public class IssueListPresenter implements IssueListContract.Presenter,
         mModel.getCachedData(new IssueListContract.Model.Callback() {
             @Override
             public void onGetResult(List<IssueEntity> data) {
-                if (data == null || data.size() == 0) {
-                    getFirstPage();
-                } else {
-                    mIssueAdapter.addAll(data);
-                    mIssueAdapter.notifyDataSetChanged();
-                }
+                mIssueAdapter.addAll(data);
+                mIssueAdapter.notifyDataSetChanged();
+
+                mLoading = false;
             }
 
             @Override

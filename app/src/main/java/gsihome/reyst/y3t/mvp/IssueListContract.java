@@ -11,7 +11,9 @@ public interface IssueListContract {
 
         interface Callback {
 
-            void getResult(List<IssueEntity> data);
+            void onGetResult(List<IssueEntity> data);
+
+            void onFailure(Throwable error);
         }
 
         void getDataPage(boolean first, Callback callback);
@@ -35,5 +37,7 @@ public interface IssueListContract {
         void setAdapter(RecyclerView.Adapter adapter);
 
         void setRefreshing(boolean flag);
+
+        void showMessage(String message);
     }
 }

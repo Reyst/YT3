@@ -59,15 +59,8 @@ public class IssueListModel implements IssueListContract.Model {
     }
 
     @Override
-    public void getDataPage(boolean first, final Callback callback) {
+    public void getDataPage(final boolean first, final Callback callback) {
         if (first) {
-            mRealmService.executeTransactionAsync(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmQuery<IssueEntity> query = getIssueEntityRealmQuery(realm);
-                    query.findAll().deleteAllFromRealm();
-                }
-            });
             mOffset = 0;
         }
 
@@ -88,16 +81,21 @@ public class IssueListModel implements IssueListContract.Model {
                 mRealmService.executeTransactionAsync(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
+
+                        if (first) {
+                            getIssueEntityRealmQuery(realm)
+                                    .findAll().deleteAllFromRealm();
+                        }
+
                         realm.copyToRealmOrUpdate(result);
                     }
                 });
-                callback.getResult(result);
+                callback.onGetResult(result);
             }
 
             @Override
             public void onFailure(Call<List<IssueEntity>> call, Throwable t) {
-                Log.d(ERROR_TAG, t.getLocalizedMessage());
-                callback.getResult(new ArrayList<IssueEntity>());
+                callback.onFailure(t);
             }
         });
     }
@@ -107,7 +105,11 @@ public class IssueListModel implements IssueListContract.Model {
         RealmQuery<IssueEntity> query = getIssueEntityRealmQuery(mRealmService);
         RealmResults<IssueEntity> result = query.findAll();
         mOffset = result.size();
-        callback.getResult(result);
+        if (mOffset == 0) {
+            callback.onFailure(null);
+        } else {
+            callback.onGetResult(result);
+        }
     }
 
     @NonNull

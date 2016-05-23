@@ -21,6 +21,8 @@ import gsihome.reyst.y3t.R;
 import gsihome.reyst.y3t.adapters.PagerAdapter;
 import gsihome.reyst.y3t.mvp.MainActivityContract;
 import gsihome.reyst.y3t.mvp.presenter.MainActivityPresenter;
+import gsihome.reyst.y3t.utils.ServiceApiHolder;
+import io.realm.Realm;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, MainActivityContract.View {
@@ -139,5 +141,15 @@ public class MainActivity extends AppCompatActivity
 
         mDrawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        Realm realmService = ServiceApiHolder.getRealmService(this);
+        if (!realmService.isClosed()) {
+            realmService.close();
+        }
+
+        super.onDestroy();
     }
 }

@@ -35,22 +35,22 @@ public class IssueListPresenter implements IssueListContract.Presenter,
     @Override
     public void init() {
 
-        mLoading = true;
+        if (mIssueAdapter.size() == 0) {
+            mLoading = true;
 
-        mModel.getCachedData(new IssueListContract.Model.Callback() {
-            @Override
-            public void onGetResult(List<IssueEntity> data) {
-                mIssueAdapter.addAll(data);
-                mIssueAdapter.notifyDataSetChanged();
+            mModel.getCachedData(new IssueListContract.Model.Callback() {
+                @Override
+                public void onGetResult(List<IssueEntity> data) {
+                    addDataIntoAdapter(data);
+                    mLoading = false;
+                }
 
-                mLoading = false;
-            }
-
-            @Override
-            public void onFailure(Throwable error) {
-                getFirstPage();
-            }
-        });
+                @Override
+                public void onFailure(Throwable error) {
+                    getFirstPage();
+                }
+            });
+        }
 
         mView.setAdapter(mIssueAdapter);
     }
@@ -72,12 +72,7 @@ public class IssueListPresenter implements IssueListContract.Presenter,
                     mIssueAdapter.remove(nullPosition);
                 }
 
-                for (IssueEntity entity : data) {
-                    if (!mIssueAdapter.contains(entity)) {
-                        mIssueAdapter.add(entity);
-                    }
-                }
-                mIssueAdapter.notifyDataSetChanged();
+                addDataIntoAdapter(data);
                 mLoading = false;
             }
 
@@ -102,8 +97,7 @@ public class IssueListPresenter implements IssueListContract.Presenter,
             @Override
             public void onGetResult(List<IssueEntity> data) {
                 mIssueAdapter.clear();
-                mIssueAdapter.addAll(data);
-                mIssueAdapter.notifyDataSetChanged();
+                addDataIntoAdapter(data);
                 mLoading = false;
                 mView.setRefreshing(false);
             }
@@ -117,6 +111,14 @@ public class IssueListPresenter implements IssueListContract.Presenter,
             }
         });
 
+    }
+
+    private void addDataIntoAdapter(List<IssueEntity> data) {
+        data.removeAll(mIssueAdapter.getModel());
+        if (data.size() > 0) {
+            mIssueAdapter.addAll(data);
+            mIssueAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override

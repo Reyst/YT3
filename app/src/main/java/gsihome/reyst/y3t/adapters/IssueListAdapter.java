@@ -31,14 +31,11 @@ public class IssueListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     private Context mContext;
     private List<IssueEntity> mModel;
-
     private OnItemClickListener mOnItemClickListener;
     private DateFormat mFormatter;
-
     private String mDays;
     private String mEmptyString;
     private Drawable mCategoryIconPlaceholder;
-
     public IssueListAdapter(Context context, OnItemClickListener listener) {
 
         mContext = context;
@@ -50,6 +47,10 @@ public class IssueListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         mOnItemClickListener = listener;
         mFormatter = ServiceApiHolder.getFormatter(context);
         mModel = new ArrayList<>();
+    }
+
+    public List<IssueEntity> getModel() {
+        return mModel;
     }
 
     public void setModel(List<IssueEntity> model) {

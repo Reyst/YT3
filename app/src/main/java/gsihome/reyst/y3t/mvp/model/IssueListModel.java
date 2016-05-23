@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import gsihome.reyst.y3t.R;
@@ -12,6 +13,7 @@ import gsihome.reyst.y3t.mvp.IssueListContract;
 import gsihome.reyst.y3t.rest.TicketService;
 import gsihome.reyst.y3t.utils.ServiceApiHolder;
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import retrofit2.Call;
@@ -98,14 +100,26 @@ public class IssueListModel implements IssueListContract.Model {
 
     @Override
     public void getCachedData(final Callback callback) {
+
+        mOffset = 0;
+
         RealmQuery<IssueEntity> query = getIssueEntityRealmQuery(mRealmService);
-        RealmResults<IssueEntity> result = query.findAll();
-        mOffset = result.size();
-        if (mOffset == 0) {
-            callback.onFailure(null);
-        } else {
-            callback.onGetResult(result);
-        }
+        RealmResults<IssueEntity> result = query.findAllAsync();
+
+        result.addChangeListener(new RealmChangeListener<RealmResults<IssueEntity>>() {
+            @Override
+            public void onChange(RealmResults<IssueEntity> element) {
+                mOffset += element.size();
+
+                List<IssueEntity> result = new ArrayList<>(element);
+
+                if (mOffset == 0) {
+                    callback.onFailure(null);
+                } else {
+                    callback.onGetResult(result);
+                }
+            }
+        });
     }
 
     @NonNull

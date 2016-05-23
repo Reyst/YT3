@@ -35,14 +35,12 @@ public class IssueListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private DateFormat mFormatter;
     private String mDays;
     private String mEmptyString;
-    private Drawable mCategoryIconPlaceholder;
     public IssueListAdapter(Context context, OnItemClickListener listener) {
 
         mContext = context;
 
         mDays = context.getString(R.string.days);
         mEmptyString = context.getString(R.string.emptyString);
-        mCategoryIconPlaceholder = ContextCompat.getDrawable(context, R.drawable.building_and_upgrade);
 
         mOnItemClickListener = listener;
         mFormatter = ServiceApiHolder.getFormatter(context);
@@ -121,9 +119,7 @@ public class IssueListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             holder.mTvDateCreated.setText(mFormatter.format(issueEntity.getCreatedDate()));
 
             Picasso.with(mContext)
-                    .load(issueEntity.getCategory().getName()) // How can a category icon be got?
-                    .placeholder(mCategoryIconPlaceholder)
-                    .error(mCategoryIconPlaceholder)
+                    .load(R.drawable.ic_doc)
                     .into(holder.mIvCategoryIcon);
 
             int daysAmount = issueEntity.getDaysAmount();

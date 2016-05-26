@@ -92,4 +92,15 @@ public class FBProfile implements RealmModel {
     public int hashCode() {
         return id.hashCode();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        FBProfile fbProfile = (FBProfile) o;
+
+        return id.equals(fbProfile.id);
+
+    }
 }

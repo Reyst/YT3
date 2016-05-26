@@ -20,22 +20,9 @@ public class FBProfile implements RealmModel {
 
     private String linkUri;
 
+    private String imageUrl;
+
     private String token;
-
-    public FBProfile() {
-    }
-
-    public FBProfile(String id, String firstName, String middleName,
-                     String lastName, String name, String linkUri, String token) {
-
-        this.id = id;
-        this.firstName = firstName;
-        this.middleName = middleName;
-        this.lastName = lastName;
-        this.name = name;
-        this.linkUri = linkUri;
-        this.token = token;
-    }
 
     public String getId() {
         return id;
@@ -93,12 +80,12 @@ public class FBProfile implements RealmModel {
         this.token = token;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        FBProfile fbProfile = (FBProfile) o;
-        return id.equals(fbProfile.id);
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     @Override

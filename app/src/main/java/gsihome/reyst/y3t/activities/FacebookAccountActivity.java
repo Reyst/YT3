@@ -4,12 +4,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
+import android.text.TextUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.Profile;
-import com.facebook.login.widget.ProfilePictureView;
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,10 +27,19 @@ public class FacebookAccountActivity extends AppCompatActivity
     Button mBtnLogout;
 
     @BindView(R.id.profile_picture)
-    ProfilePictureView mProfilePictureView;
+    ImageView mProfilePictureView;
 
     @BindView(R.id.user_name)
     TextView mTvName;
+
+    @BindView(R.id.first_name)
+    TextView mTvFirstName;
+
+    @BindView(R.id.middle_name)
+    TextView mTvMiddleName;
+
+    @BindView(R.id.last_name)
+    TextView mTvLastName;
 
     private FacebookAccountContract.Presenter mPresenter;
 
@@ -43,14 +54,45 @@ public class FacebookAccountActivity extends AppCompatActivity
     }
 
     @Override
-    public void updateViews(Profile profile) {
-        mProfilePictureView.setProfileId(profile.getId());
-        mTvName.setText(profile.getName());
+    public void updateTextInfo(Profile profile) {
+
+        if (profile != null) {
+
+            mTvName.setText(profile.getName());
+
+            if (!TextUtils.isEmpty(profile.getFirstName())) {
+                mTvFirstName.setText(profile.getFirstName());
+            }
+
+            if (!TextUtils.isEmpty(profile.getMiddleName())) {
+                mTvMiddleName.setText(profile.getMiddleName());
+            }
+
+            if (!TextUtils.isEmpty(profile.getLastName())) {
+                mTvLastName.append(profile.getLastName());
+            }
+        }
+    }
+
+    @Override
+    public void updatePicture(String url) {
+
+        if (!TextUtils.isEmpty(url)) {
+            Picasso.with(this)
+                    .load(url)
+                    .placeholder(R.drawable.com_facebook_profile_picture_blank_portrait)
+                    .into(mProfilePictureView);
+        }
     }
 
     @Override
     public Activity getActivity() {
         return this;
+    }
+
+    @Override
+    public void showMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override

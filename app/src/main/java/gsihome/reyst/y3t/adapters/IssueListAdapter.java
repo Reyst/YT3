@@ -2,7 +2,9 @@ package gsihome.reyst.y3t.adapters;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.os.SystemClock;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.util.TimeUtils;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +17,11 @@ import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -122,11 +127,18 @@ public class IssueListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     .load(R.drawable.ic_doc)
                     .into(holder.mIvCategoryIcon);
 
-            int daysAmount = issueEntity.getDaysAmount();
-            String strDaysAmount = (daysAmount > -1) ? String.valueOf(daysAmount)
-                    .concat(" ").concat(mDays) : mEmptyString;
 
-            holder.mTvDaysAmount.setText(strDaysAmount);
+            Date cd = issueEntity.getCreatedDate();
+
+            int daysAmount = -1;
+            if (cd != null) {
+                daysAmount = (int) TimeUnit.DAYS
+                        .convert(System.currentTimeMillis() - cd.getTime(), TimeUnit.MILLISECONDS);
+            }
+
+            holder.mTvDaysAmount.setText((daysAmount > -1) ? String.valueOf(daysAmount)
+                    .concat(" ").concat(mDays) : mEmptyString);
+
         } else {
             ((ProgressViewHolder) viewHolder).mProgressBar.setIndeterminate(true);
         }

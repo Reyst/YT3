@@ -35,6 +35,7 @@ public class IssueListPresenter implements IssueListContract.Presenter,
     @Override
     public void init() {
 
+        mView.setAdapter(mIssueAdapter);
         if (mIssueAdapter.size() == 0) {
             mLoading = true;
 
@@ -51,12 +52,12 @@ public class IssueListPresenter implements IssueListContract.Presenter,
                 }
             });
         }
-
-        mView.setAdapter(mIssueAdapter);
     }
 
     @Override
     public void getNextPage() {
+
+        int offset = mIssueAdapter.size();
 
         mLoading = true;
 
@@ -64,7 +65,7 @@ public class IssueListPresenter implements IssueListContract.Presenter,
         final int nullPosition = mIssueAdapter.size() - 1;
         mIssueAdapter.notifyItemInserted(nullPosition);
 
-        mModel.getDataPage(false, new IssueListContract.Model.Callback() {
+        mModel.getDataPage(offset, new IssueListContract.Model.Callback() {
             @Override
             public void onGetResult(List<IssueEntity> data) {
 
@@ -91,9 +92,8 @@ public class IssueListPresenter implements IssueListContract.Presenter,
     @Override
     public void getFirstPage() {
         mLoading = true;
-        mView.setRefreshing(true);
 
-        mModel.getDataPage(true, new IssueListContract.Model.Callback() {
+        mModel.getDataPage(0, new IssueListContract.Model.Callback() {
             @Override
             public void onGetResult(List<IssueEntity> data) {
                 mIssueAdapter.clear();

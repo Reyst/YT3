@@ -16,7 +16,7 @@ public interface IssueListContract {
             void onFailure(Throwable error);
         }
 
-        void getDataPage(boolean first, Callback callback);
+        void getDataPage(int offset, Callback callback);
 
         void getCachedData(Callback callback);
     }

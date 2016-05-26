@@ -13,7 +13,6 @@ import gsihome.reyst.y3t.mvp.IssueListContract;
 import gsihome.reyst.y3t.rest.TicketService;
 import gsihome.reyst.y3t.utils.ServiceApiHolder;
 import io.realm.Realm;
-import io.realm.RealmChangeListener;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import retrofit2.Call;
@@ -30,7 +29,6 @@ public class IssueListModel implements IssueListContract.Model {
     private long[] mQueryFilter;
 
     private int mPageSize;
-    private int mOffset;
 
     public IssueListModel(Context context, String filter) {
 
@@ -43,7 +41,6 @@ public class IssueListModel implements IssueListContract.Model {
         mRealmService = ServiceApiHolder.getRealmService(context);
 
         mPageSize = context.getResources().getInteger(R.integer.data_page_size);
-        mOffset = 0;
     }
 
     private void initQueryFilter() {
@@ -57,24 +54,20 @@ public class IssueListModel implements IssueListContract.Model {
     }
 
     @Override
-    public void getDataPage(final boolean first, final Callback callback) {
-        if (first) {
-            mOffset = 0;
-        }
+    public void getDataPage(final int offset, final Callback callback) {
 
+        final boolean first = offset == 0;
         Call<List<IssueEntity>> call;
         if (TextUtils.isEmpty(mFilter)) {
-            call = mTicketService.getAll(mPageSize, mOffset);
+            call = mTicketService.getAll(mPageSize, offset);
         } else {
-            call = mTicketService.getListByStateFilter(mFilter, mPageSize, mOffset);
+            call = mTicketService.getListByStateFilter(mFilter, mPageSize, offset);
         }
 
         call.enqueue(new retrofit2.Callback<List<IssueEntity>>() {
             @Override
             public void onResponse(Call<List<IssueEntity>> call, Response<List<IssueEntity>> response) {
                 final List<IssueEntity> result = response.body();
-
-                mOffset += result.size();
 
                 mRealmService.executeTransactionAsync(new Realm.Transaction() {
                     @Override
@@ -101,25 +94,14 @@ public class IssueListModel implements IssueListContract.Model {
     @Override
     public void getCachedData(final Callback callback) {
 
-        mOffset = 0;
+        RealmResults<IssueEntity> result = getIssueEntityRealmQuery(mRealmService).findAll();
 
-        RealmQuery<IssueEntity> query = getIssueEntityRealmQuery(mRealmService);
-        RealmResults<IssueEntity> result = query.findAllAsync();
-
-        result.addChangeListener(new RealmChangeListener<RealmResults<IssueEntity>>() {
-            @Override
-            public void onChange(RealmResults<IssueEntity> element) {
-                mOffset += element.size();
-
-                List<IssueEntity> result = new ArrayList<>(element);
-
-                if (mOffset == 0) {
-                    callback.onFailure(null);
-                } else {
-                    callback.onGetResult(result);
-                }
-            }
-        });
+        if (result.isEmpty()) {
+            callback.onFailure(null);
+        } else {
+            List<IssueEntity> data = new ArrayList<>(result);
+            callback.onGetResult(data);
+        }
     }
 
     @NonNull
@@ -128,7 +110,9 @@ public class IssueListModel implements IssueListContract.Model {
         if (mQueryFilter != null) {
             boolean nonFirst = false;
             for (long param : mQueryFilter) {
-                if (nonFirst) query.or();
+                if (nonFirst) {
+                    query.or();
+                }
                 nonFirst = true;
                 query.equalTo("state.id", param);
             }

@@ -252,14 +252,20 @@
                 android:layout_marginRight="@dimen/scrollview_padding"
                 android:layout_marginEnd="@dimen/scrollview_padding"
 
-                android:layout_alignBottom="@id/tv_responsible"
+                android:layout_alignTop="@id/tv_responsible"
+
+                tools:text="QQQQQQQQQQQ QQQQQQQQQQQQQQQQQQ QQQQQQQQQQQ"
+                android:layout_toRightOf="@+id/tv_status"
+                android:layout_toEndOf="@+id/tv_status"
+
+                android:gravity="end"
                 />
 
             <View
                 android:id="@+id/divider5"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/divider_thick"
-                android:layout_below="@id/tv_responsible"
+                android:layout_below="@id/tv_value_responsible"
                 android:layout_marginTop="@dimen/text_part_vertical_padding"
                 style="@style/DividerStyle"
                 />

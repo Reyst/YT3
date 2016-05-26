@@ -190,12 +190,4 @@ public class IssueEntity implements RealmModel {
         return (int) (id ^ (id >>> 32));
     }
 
-    public int getDaysAmount() {
-        int result = -1;
-        Date now = new Date();
-        if (createdDate != null) {
-            result = (int) ((now.getTime() - createdDate.getTime()) / (1000 * 24 * 3600));
-        }
-        return result;
-    }
 }

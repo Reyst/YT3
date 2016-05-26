@@ -75,7 +75,7 @@ public class ServiceApiHolder {
     }
 
     public static Realm getRealmService(Context context) {
-        if (sRealm == null) {
+        if (sRealm == null || sRealm.isClosed()) {
             RealmConfiguration realmConfig = new RealmConfiguration.Builder(context)
                     .schemaVersion(1)
                     .deleteRealmIfMigrationNeeded() // need Migration

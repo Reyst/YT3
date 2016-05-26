@@ -3,6 +3,7 @@ package gsihome.reyst.y3t.mvp.presenter;
 import android.content.Context;
 import android.content.Intent;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -13,68 +14,71 @@ import com.facebook.login.LoginResult;
 
 import java.util.Collections;
 
-import gsihome.reyst.y3t.domain.FBProfile;
 import gsihome.reyst.y3t.mvp.FacebookAccountContract;
-import gsihome.reyst.y3t.utils.ServiceApiHolder;
-import io.realm.Realm;
+import gsihome.reyst.y3t.mvp.model.FacebookProfileModel;
 
 public class FacebookAccountPresenter implements FacebookAccountContract.Presenter {
 
-    private Context mContext;
-
     private FacebookAccountContract.View mView;
+    private FacebookAccountContract.Model mModel;
 
-    private String mToken;
-    private String mProfileId;
     private CallbackManager mCallbackManager;
     private ProfileTracker mProfileTracker;
+    private AccessToken mAccessToken;
 
-    public FacebookAccountPresenter(Context mContext, FacebookAccountContract.View mView) {
-        this.mContext = mContext;
+    public FacebookAccountPresenter(Context context, FacebookAccountContract.View mView) {
         this.mView = mView;
+        this.mModel = new FacebookProfileModel(context);
     }
 
     @Override
     public void onCreate() {
+
         mCallbackManager = CallbackManager.Factory.create();
+        mAccessToken = AccessToken.getCurrentAccessToken();
 
-        LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
+        if (mAccessToken == null || mAccessToken.isExpired()) {
+            LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
 
-                mToken = loginResult.getAccessToken().getToken();
-                mProfileId = loginResult.getAccessToken().getUserId();
-
-                Profile profile = Profile.getCurrentProfile();
-                if (profile == null) {
-                    mProfileTracker = new ProfileTracker() {
-                        @Override
-                        protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
-                            stopTracking();
-                            saveProfile(currentProfile);
-                            mView.updateViews(currentProfile);
-                        }
-                    };
-                    mProfileTracker.startTracking();
-                } else {
-                    saveProfile(profile);
-                    mView.updateViews(profile);
+                @Override
+                public void onSuccess(LoginResult loginResult) {
+                    mAccessToken = loginResult.getAccessToken();
+                    Profile profile = Profile.getCurrentProfile();
+                    if (profile == null) {
+                        mProfileTracker = new ProfileTracker() {
+                            @Override
+                            protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
+                                stopTracking();
+                                saveProfile(currentProfile);
+                            }
+                        };
+                        mProfileTracker.startTracking();
+                    } else {
+                        saveProfile(profile);
+                    }
                 }
-            }
 
-            @Override
-            public void onCancel() {
-                logOut();
-            }
+                @Override
+                public void onCancel() {
+                    logOut();
+                }
 
-            @Override
-            public void onError(FacebookException error) {
+                @Override
+                public void onError(FacebookException error) {
+                    mView.showMessage(error.getLocalizedMessage());
+                    logOut();
+                }
+            });
 
-            }
-        });
+            LoginManager.getInstance().logInWithReadPermissions(
+                    mView.getActivity(),
+                    Collections.singletonList("public_profile")
+            );
 
-        LoginManager.getInstance()
-                .logInWithReadPermissions(mView.getActivity(), Collections.singletonList("public_profile"));
+        } else {
+            mView.updateTextInfo(mModel.getCachedProfile(mAccessToken.getUserId()));
+            mView.updatePicture(mModel.getProfileImageUrl(mAccessToken.getUserId()));
+        }
     }
 
     @Override
@@ -90,29 +94,23 @@ public class FacebookAccountPresenter implements FacebookAccountContract.Present
 
     @Override
     public void onDestroy() {
-        if (mProfileTracker != null && mProfileTracker.isTracking()){
+        if (mProfileTracker != null && mProfileTracker.isTracking()) {
             mProfileTracker.stopTracking();
         }
     }
 
-    private void saveProfile(Profile profile) {
-
-        Realm realm = ServiceApiHolder.getRealmService(mContext);
-
-        if (profile != null) {
-            realm.beginTransaction();
-            FBProfile fbProfile = realm.where(FBProfile.class).equalTo("id", mProfileId).findFirst();
-            if (fbProfile == null) {
-                fbProfile = realm.createObject(FBProfile.class);
-                fbProfile.setId(mProfileId);
+    private void saveProfile(final Profile profile) {
+        mModel.saveProfile(profile, mAccessToken, new FacebookAccountContract.Model.OnSaveCallback() {
+            @Override
+            public void onSuccess() {
+                mView.updateTextInfo(profile);
+                mView.updatePicture(mModel.getProfileImageUrl(profile.getId()));
             }
-            fbProfile.setFirstName(profile.getFirstName());
-            fbProfile.setMiddleName(profile.getMiddleName());
-            fbProfile.setLastName(profile.getLastName());
-            fbProfile.setName(profile.getName());
-            fbProfile.setLinkUri(profile.getLinkUri().toString());
-            fbProfile.setToken(mToken);
-            realm.commitTransaction();
-        }
+
+            @Override
+            public void onFailure(Throwable error) {
+                mView.showMessage(error.getLocalizedMessage());
+            }
+        });
     }
 }
